@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.DashboardController"
+      styleClass="vbox">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Button text="Voir Liste de Consultation" onAction="#viewConsultations" styleClass="button"/>
+    <Button text="Voir Liste des Offres" onAction="#viewOffers" styleClass="button"/>
+    <Button text="Consulter" onAction="#consult" styleClass="button"/>
+</VBox>

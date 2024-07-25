@@ -1,0 +1,22 @@
+/* styles.css */
+
+.vbox {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+    -fx-padding: 20;
+    -fx-background-color: #f5f5f5; /* Light grey background */
+}
+
+.button {
+    -fx-background-color: #007bff; /* Bootstrap blue */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, #000000, 5, 0.5, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: #0056b3; /* Darker blue on hover */
+}

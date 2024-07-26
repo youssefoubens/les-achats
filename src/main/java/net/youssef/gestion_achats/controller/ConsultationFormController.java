@@ -3,11 +3,8 @@ package net.youssef.gestion_achats.controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.services.*;
 import net.youssef.gestion_achats.util.EmailSender;
@@ -58,7 +55,11 @@ public class ConsultationFormController {
     @Autowired
     private ConsultationService consultationService;
 
-    private Scene previousScene;
+    private DashboardController dashboardController;
+
+    public void setDashboardController(DashboardController dashboardController) {
+        this.dashboardController = dashboardController;
+    }
 
     public void initialize() {
         List<Article> articles = articleService.getAllArticles();
@@ -79,34 +80,19 @@ public class ConsultationFormController {
 
     @FXML
     public void sendEmail() {
-        Fournisseur fournisseur = fournisseurComboBox.getValue();
-        String subject = emailSubject.getText();
-        String content = emailContent.getText();
 
-        // Use the EmailSender utility to send the email
-        EmailSender.sendEmail(fournisseur.getEmail(), subject, content);
 
         // Optionally, save the consultation details
         consultation consultation = new consultation();
         consultation.setArticle(articleComboBox.getValue());
         consultation.setSousSousArticle(sousSousArticleComboBox.getValue());
-        consultation.setFournisseur(fournisseur);
+       // consultation.setFournisseur(fournisseur);
         consultationService.saveConsultation(consultation);
     }
 
+    @FXML
     public void goback(ActionEvent actionEvent) {
-        // Retrieve the stage from the event source
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
-        // Navigate back to the previous scene
-        if (previousScene != null) {
-            stage.setScene(previousScene);
-        } else {
-            System.out.println("No previous scene available");
-        }
-    }
-
-    public void setPreviousScene(Scene scene) {
-        this.previousScene = scene;
+        dashboardController.goback(actionEvent);
     }
 }

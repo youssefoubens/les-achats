@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.ConsultationController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <children>
+        <TableView fx:id="consultationTable" layoutX="20.0" layoutY="20.0" prefHeight="400.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" />
+                <TableColumn fx:id="fournisseurColumn" text="Fournisseur" />
+                <TableColumn fx:id="articleColumn" text="Article" />
+                <TableColumn fx:id="sousArticleColumn" text="Sous-Article" />
+                <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" />
+                <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" />
+            </columns>
+        </TableView>
+        <Button text="Go Back" onAction="#goback" layoutX="20.0" layoutY="430.0"/>
+    </children>
+</AnchorPane>

@@ -9,7 +9,9 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-    <Button text="Voir Liste de Consultation" onAction="#viewConsultations" styleClass="button"/>
+    <Button text="Home" onAction="#showHome" styleClass="button"/>
+    <Button text="Voir Liste des Consultations" onAction="#viewConsultations" styleClass="button"/>
     <Button text="Voir Liste des Offres" onAction="#viewOffers" styleClass="button"/>
     <Button text="Consulter" onAction="#consult" styleClass="button"/>
+    <Button text="Exit" onAction="#exitApplication" styleClass="button"/>
 </VBox>

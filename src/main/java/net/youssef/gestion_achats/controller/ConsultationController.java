@@ -89,10 +89,6 @@ public class ConsultationController {
         List<consultation> consultations = consultationService.getAllConsultations();
         consultationTable.setItems(FXCollections.observableArrayList(consultations));
     }
-    @FXML
-    public void goback(ActionEvent actionEvent) {
 
-        dashboardController.goback(actionEvent);
-    }
 
 }

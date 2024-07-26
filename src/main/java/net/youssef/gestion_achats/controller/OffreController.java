@@ -66,9 +66,7 @@ public class OffreController {
 
     @FXML
 
-    public void goback(ActionEvent actionEvent) {
-        dashboardController.goback(actionEvent);
-    }
+
 
     private DashboardController dashboardController;
 

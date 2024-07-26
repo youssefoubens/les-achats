@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.HomeController"
-      alignment="CENTER" spacing="20" padding="20">
-    <HBox spacing="10" alignment="CENTER">
-        <Button text="Add Offre" onAction="#addOffre" styleClass="button"/>
-        <Button text="Manage Fournisseurs" onAction="#manageFournisseurs" styleClass="button"/>
-        <Button text="Manage Produits" onAction="#manageProduits" styleClass="button"/>
-    </HBox>
-</VBox>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns:jfx="http://jfoenix.com/jfoenix" fx:controller="net.youssef.gestion_achats.controller.HomeController">
+    <padding>
+        <Insets top="10" right="20" bottom="30" left="40"/>
+    </padding>
+    <JFXButton text="Add Offer" layoutX="10" layoutY="50" onAction="#addOffre" styleClass="jfx-button"/>
+    <JFXButton text="Manage Suppliers" layoutX="10" layoutY="90" onAction="#manageFournisseurs" styleClass="jfx-button"/>
+    <JFXButton text="Manage Products" layoutX="10" layoutY="130" onAction="#manageProduits" styleClass="jfx-button"/>
+</AnchorPane>

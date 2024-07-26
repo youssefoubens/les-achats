@@ -17,6 +17,6 @@
                 <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" />
             </columns>
         </TableView>
-        <Button text="Go Back" onAction="#goback" layoutX="20.0" layoutY="430.0"/>
+
     </children>
 </AnchorPane>

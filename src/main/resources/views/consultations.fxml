@@ -21,6 +21,6 @@
                 <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" />
             </columns>
         </TableView>
-        <Button text="Go Back" onAction="#goback" layoutX="20.0" layoutY="430.0"/>
+
     </children>
 </AnchorPane>

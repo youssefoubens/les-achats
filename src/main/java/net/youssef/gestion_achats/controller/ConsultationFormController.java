@@ -90,9 +90,5 @@ public class ConsultationFormController {
         consultationService.saveConsultation(consultation);
     }
 
-    @FXML
-    public void goback(ActionEvent actionEvent) {
 
-        dashboardController.goback(actionEvent);
-    }
 }

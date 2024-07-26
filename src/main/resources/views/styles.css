@@ -1,22 +1,51 @@
-/* styles.css */
-
-.vbox {
-    -fx-alignment: center;
-    -fx-spacing: 20;
-    -fx-padding: 20;
-    -fx-background-color: #f5f5f5; /* Light grey background */
+.sidebar {
+    -fx-background-color: #333;
+    -fx-padding: 10;
+    -fx-alignment: center; /* Center content horizontally */
 }
 
-.button {
-    -fx-background-color: #007bff; /* Bootstrap blue */
+.sidebar .logo {
+    -fx-margin-bottom: 20px;
+}
+
+.sidebar .button {
+    -fx-background-color: transparent;
     -fx-text-fill: white;
+    -fx-padding: 10;
     -fx-font-size: 14px;
-    -fx-padding: 10 20;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
     -fx-border-radius: 5;
-    -fx-background-radius: 5;
-    -fx-effect: dropshadow(gaussian, #000000, 5, 0.5, 0, 2);
 }
 
-.button:hover {
-    -fx-background-color: #0056b3; /* Darker blue on hover */
+.sidebar .button:hover {
+    -fx-background-color: #575757;
+}
+
+.gray-button {
+    -fx-background-color: #b0b0b0; /* Gray background color */
+    -fx-text-fill: black; /* Black text color for contrast */
+}
+
+.red-button {
+    -fx-background-color: #e74c3c; /* Red background color */
+    -fx-text-fill: white; /* White text color for contrast */
+}
+
+.exit-button {
+    -fx-background-color: #e74c3c; /* Red color for exit button */
+    -fx-text-fill: white;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5;
+    -fx-margin-top: auto; /* Push to the bottom */
+    -fx-alignment: center;
+}
+
+.jfx-button {
+    -fx-background-color: #4caf50; /* Green color */
+    -fx-text-fill: white; /* White text color */
+    -fx-padding: 10 20; /* Padding around the text */
+    -fx-font-size: 14px; /* Font size */
+    -fx-border-radius: 5; /* Rounded corners */
 }

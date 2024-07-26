@@ -1,14 +1,18 @@
 package net.youssef.gestion_achats.controller;
-
+import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.youssef.gestion_achats.util.FxmlLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.awt.*;
 import java.io.IOException;
 
 @Controller
@@ -16,68 +20,49 @@ public class DashboardController {
 
     @Autowired
     private FxmlLoader fxmlLoader;
-
+    @FXML
+    private ImageView logoImageView;
     private Stage primaryStage;
     private Scene previousScene;
 
+    @FXML
+    private AnchorPane contentPane;
     public void setPrimaryStage(Stage stage) {
         this.primaryStage = stage;
     }
-
-    public void viewConsultations(ActionEvent event) throws IOException {
-        setPreviousScene();
-        Parent root = fxmlLoader.load("/views/consultations.fxml");
-        Scene newScene = new Scene(root, 800, 600); // Adjust size as needed
-        ConsultationController controller = (ConsultationController) fxmlLoader.getController("/views/consultations.fxml");
-        controller.setDashboardController(this);
-        primaryStage.setScene(newScene);
-        primaryStage.setTitle("Liste des Consultations");
-        primaryStage.show();
+    @FXML
+    public void initialize() {
+        // Load the logo image
+        Image logoImage = new Image(getClass().getResourceAsStream("/images/logo.png"));
+        logoImageView.setImage(logoImage);
+        // Load the home view by default
+        loadContent("/views/home.fxml");
+    }
+    @FXML
+    public void viewConsultations(ActionEvent event) {
+        loadContent("/views/consultations.fxml");
     }
 
-    public void viewOffers(ActionEvent event) throws IOException {
-        setPreviousScene();
-        Parent root = fxmlLoader.load("/views/offers.fxml");
-        Scene newScene = new Scene(root, 800, 600); // Adjust size as needed
-        OffreController controller = (OffreController) fxmlLoader.getController("/views/offers.fxml");
-        controller.setDashboardController(this);
-        primaryStage.setScene(newScene);
-        primaryStage.setTitle("Liste des Offres");
-        primaryStage.show();
+    @FXML
+    public void viewOffers(ActionEvent event) {
+        loadContent("/views/offers.fxml");
     }
 
-    public void consult(ActionEvent event) throws IOException {
-        setPreviousScene();
-        Parent root = fxmlLoader.load("/views/consultationForm.fxml");
-        Scene newScene = new Scene(root);
-        ConsultationFormController controller = (ConsultationFormController) fxmlLoader.getController("/views/consultationForm.fxml");
-        controller.setDashboardController(this);
-        primaryStage.setScene(newScene);
-        primaryStage.setTitle("Consulter");
-        primaryStage.show();
+    @FXML
+    public void consult(ActionEvent event) {
+        loadContent("/views/consultationForm.fxml");
     }
 
-    public void showHome(ActionEvent event) throws IOException {
-        setPreviousScene();
-        Parent root = fxmlLoader.load("/views/home.fxml");
-        Scene newScene = new Scene(root);
-        primaryStage.setScene(newScene);
-        primaryStage.setTitle("Home");
-        primaryStage.show();
+    @FXML
+    public void showHome(ActionEvent event) {
+        loadContent("/views/home.fxml");
     }
 
+    @FXML
     public void exitApplication(ActionEvent event) {
         System.exit(0);
     }
 
-    public void goback(ActionEvent actionEvent) {
-        if (previousScene != null) {
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setScene(previousScene);
-        } else {
-            System.out.println("No previous scene available");
-        }
-    }
 
     private void setPreviousScene() {
         if (primaryStage != null) {
@@ -85,6 +70,12 @@ public class DashboardController {
         }
     }
 
-    public void loadContent(String s) {
+    public void loadContent(String fxmlPath) {
+        try {
+            Parent newContent = fxmlLoader.load(fxmlPath);
+            contentPane.getChildren().setAll(newContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

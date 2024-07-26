@@ -30,5 +30,5 @@
     <TextArea fx:id="emailContent" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.rowSpan="2"/>
 
     <Button text="Send Email" onAction="#sendEmail" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
-    <Button text="goback" onAction="#goback" GridPane.rowIndex="8" GridPane.columnIndex="5"/>
+
 </GridPane>

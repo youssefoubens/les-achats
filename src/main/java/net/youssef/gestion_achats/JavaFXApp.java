@@ -43,7 +43,7 @@ public class JavaFXApp extends Application {
         scene.getStylesheets().add(getClass().getResource("/views/styles.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Dashboard");
-        primaryStage.setMinWidth(800);
+        primaryStage.setMinWidth(1150);
         primaryStage.setMinHeight(600);
         primaryStage.show();
     }

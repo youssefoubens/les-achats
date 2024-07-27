@@ -58,13 +58,13 @@ public class ManageProductsController {
     @FXML
     private ComboBox<sarticle> sArticleComboBox;
 
-    private ObservableList<Object> productList;
     private ObservableList<Article_type> articleTypeList;
     private ObservableList<Article> articleList;
     private ObservableList<sarticle> sArticleList;
 
     @FXML
     public void initialize() {
+        // Set up TreeTableColumn bindings
         idColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
         unityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("unity"));
@@ -72,10 +72,7 @@ public class ManageProductsController {
         priceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("price"));
         totalPriceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalprice"));
 
-        TreeItem<Object> rootItem = new TreeItem<>(new Object());
-        productTreeTable.setRoot(rootItem);
-        productTreeTable.setShowRoot(false);
-
+        // Set up ComboBoxes
         articleTypeList = FXCollections.observableArrayList(articleTypeService.getAllTypes());
         articleTypeComboBox.setItems(articleTypeList);
 
@@ -85,30 +82,40 @@ public class ManageProductsController {
         sArticleList = FXCollections.observableArrayList(sArticleService.getAllSarticles());
         sArticleComboBox.setItems(sArticleList);
 
+        // Load data into the TreeTableView
         loadData();
     }
 
     private void loadData() {
-        TreeItem<Object> rootItem = productTreeTable.getRoot();
-        rootItem.getChildren().clear();
+        TreeItem<Object> rootItem = new TreeItem<>(new Object());
+        productTreeTable.setRoot(rootItem);
+        productTreeTable.setShowRoot(false);
 
-        articleList.forEach(article -> {
+        // Loop through all articles
+        for (Article article : articleList) {
             TreeItem<Object> articleItem = new TreeItem<>(article);
             rootItem.getChildren().add(articleItem);
-            article.getTypes().forEach(type -> {
+
+            // Loop through all article types for the current article
+            for (Article_type type : article.getTypes()) {
                 TreeItem<Object> typeItem = new TreeItem<>(type);
                 articleItem.getChildren().add(typeItem);
-                type.getSousArticles().forEach(sArticle -> {
+
+                // Loop through all sub-articles for the current type
+                for (sarticle sArticle : type.getSousArticles()) {
                     TreeItem<Object> sArticleItem = new TreeItem<>(sArticle);
                     typeItem.getChildren().add(sArticleItem);
-                    sArticle.getSsarticles().forEach(ssArticle -> {
+
+                    // Loop through all sub-sub-articles for the current sub-article
+                    for (ssarticle ssArticle : sArticle.getSsarticles()) {
                         TreeItem<Object> ssArticleItem = new TreeItem<>(ssArticle);
                         sArticleItem.getChildren().add(ssArticleItem);
-                    });
-                });
-            });
-        });
+                    }
+                }
+            }
+        }
     }
+
 
     @FXML
     public void addArticle() {
@@ -253,7 +260,6 @@ public class ManageProductsController {
 
     private void modifyArticle(Article article) {
         // Implement logic to modify Article
-        // For example: populate the fields with the selected article data and allow the user to make changes
     }
 
     private void modifyArticleType(Article_type articleType) {

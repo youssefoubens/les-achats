@@ -30,7 +30,7 @@ public class HomeController {
     @FXML
     public void manageFournisseurs(ActionEvent event) throws IOException {
         // Load the Manage Fournisseurs scene
-        dashboardController.loadContent("/views/manageFournisseurs.fxml");
+        dashboardController.loadContent("/views/fournisseur_management.fxml");
     }
 
     @FXML

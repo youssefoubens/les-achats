@@ -12,5 +12,6 @@ public interface Article_TypeRepository extends JpaRepository<Article_type,Long>
     Article_type findByName(String name);
 
 
+
 }
 

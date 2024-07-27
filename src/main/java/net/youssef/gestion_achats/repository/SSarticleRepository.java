@@ -12,5 +12,6 @@ public interface SSarticleRepository extends JpaRepository<ssarticle,Long>{
     ssarticle findByName(String name);
 
 
+
 }
 

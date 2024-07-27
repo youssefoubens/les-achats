@@ -4,39 +4,39 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.ManageProductsController">
-    <VBox spacing="10" alignment="CENTER">
-        <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="nameField" promptText="Name" />
-            <TextField fx:id="unityField" promptText="Unity" />
-            <TextField fx:id="quantityField" promptText="Quantity" />
-            <TextField fx:id="priceField" promptText="Price" />
-            <TextField fx:id="totalPriceField" promptText="Total Price" />
+    <VBox alignment="CENTER" stylesheets="/views/style1.css">
+        <HBox alignment="CENTER" styleClass="hbox">
+            <TextField fx:id="nameField" promptText="Name" styleClass="text-field" />
+            <TextField fx:id="unityField" promptText="Unity" styleClass="text-field" />
+            <TextField fx:id="quantityField" promptText="Quantity" styleClass="text-field" />
+            <TextField fx:id="priceField" promptText="Price" styleClass="text-field" />
+            <TextField fx:id="totalPriceField" promptText="Total Price" styleClass="text-field" />
         </HBox>
 
-        <HBox spacing="10" alignment="CENTER">
-            <TextField fx:id="typeNameField" promptText="Type Name" />
-            <ComboBox fx:id="articleComboBox" />
-            <ComboBox fx:id="articleTypeComboBox" />
-            <ComboBox fx:id="sArticleComboBox" />
+        <HBox alignment="CENTER" styleClass="hbox">
+            <TextField fx:id="typeNameField" promptText="Type Name" styleClass="text-field" />
+            <ComboBox fx:id="articleComboBox" promptText="Article" styleClass="combo-box" />
+            <ComboBox fx:id="articleTypeComboBox" promptText="Article Type" styleClass="combo-box" />
+            <ComboBox fx:id="sArticleComboBox" promptText="Sub-Article" styleClass="combo-box" />
         </HBox>
 
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Add Article" onAction="#addArticle" />
-            <Button text="Add Article Type" onAction="#addArticleType" />
-            <Button text="Add Sub-Article" onAction="#addSArticle" />
-            <Button text="Add Sub-Sub-Article" onAction="#addSSArticle" />
-            <Button text="Modify" onAction="#modifyProduct" />
+        <HBox alignment="CENTER" styleClass="hbox">
+            <Button text="Add Article" onAction="#addArticle" styleClass="button" />
+            <Button text="Add Article Type" onAction="#addArticleType" styleClass="button" />
+            <Button text="Add Sub-Article" onAction="#addSArticle" styleClass="button" />
+            <Button text="Add Sub-Sub-Article" onAction="#addSSArticle" styleClass="button" />
+            <Button text="Modify" onAction="#modifyProduct" styleClass="button" />
         </HBox>
 
-        <TableView fx:id="productTable">
+        <TreeTableView fx:id="productTreeTable" styleClass="tree-table-view">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" />
-                <TableColumn fx:id="nameColumn" text="Name" />
-                <TableColumn fx:id="unityColumn" text="Unity" />
-                <TableColumn fx:id="quantityColumn" text="Quantity" />
-                <TableColumn fx:id="priceColumn" text="Price" />
-                <TableColumn fx:id="totalPriceColumn" text="Total Price" />
+                <TreeTableColumn fx:id="idColumn" text="ID" />
+                <TreeTableColumn fx:id="nameColumn" text="Name" />
+                <TreeTableColumn fx:id="unityColumn" text="Unity" />
+                <TreeTableColumn fx:id="quantityColumn" text="Quantity" />
+                <TreeTableColumn fx:id="priceColumn" text="Price" />
+                <TreeTableColumn fx:id="totalPriceColumn" text="Total Price" />
             </columns>
-        </TableView>
+        </TreeTableView>
     </VBox>
 </AnchorPane>

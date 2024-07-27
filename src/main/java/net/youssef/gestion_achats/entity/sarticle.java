@@ -30,6 +30,8 @@ public class sarticle {
     private Article article;
     @OneToMany(mappedBy = "sarticle", cascade = CascadeType.ALL)
     private List<ssarticle> ssarticles;
-
-
+@Override
+    public String toString() {
+        return name; // Display name in the ComboBox
+    }
 }

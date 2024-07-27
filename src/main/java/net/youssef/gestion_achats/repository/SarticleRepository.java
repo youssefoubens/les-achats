@@ -12,5 +12,7 @@ public interface SarticleRepository extends JpaRepository<sarticle,Long>{
     sarticle findByName(String name);
 
 
+
+
 }
 

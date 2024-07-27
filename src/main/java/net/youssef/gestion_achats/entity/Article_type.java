@@ -23,8 +23,12 @@ public class Article_type {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<sarticle> sousArticles;
 
 
+    @Override
+    public String toString() {
+        return name; // Display name in the ComboBox
+    }
 }

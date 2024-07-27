@@ -25,4 +25,9 @@ public class Article {
     public List<Article_type> types;
 
     // getters and setters
+    @Override
+   
+    public String toString() {
+        return name; // Display name in the ComboBox
+    }
 }

@@ -2,18 +2,13 @@ package net.youssef.gestion_achats.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
-import net.youssef.gestion_achats.entity.Article;
-import net.youssef.gestion_achats.entity.Article_type;
-import net.youssef.gestion_achats.entity.sarticle;
-import net.youssef.gestion_achats.entity.ssarticle;
-import net.youssef.gestion_achats.services.ArticleService;
-import net.youssef.gestion_achats.services.Articletypeservice;
-import net.youssef.gestion_achats.services.Sarticleservice;
-import net.youssef.gestion_achats.services.SSarticleservices;
+import javafx.scene.control.TreeItem;
+import net.youssef.gestion_achats.entity.*;
+import net.youssef.gestion_achats.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -30,19 +25,19 @@ public class ManageProductsController {
     private SSarticleservices ssArticleService;
 
     @FXML
-    private TableView<Object> productTable;
+    private TreeTableView<Object> productTreeTable;
     @FXML
-    private TableColumn<Object, Long> idColumn;
+    private TreeTableColumn<Object, Long> idColumn;
     @FXML
-    private TableColumn<Object, String> nameColumn;
+    private TreeTableColumn<Object, String> nameColumn;
     @FXML
-    private TableColumn<Object, String> unityColumn;
+    private TreeTableColumn<Object, String> unityColumn;
     @FXML
-    private TableColumn<Object, Integer> quantityColumn;
+    private TreeTableColumn<Object, Integer> quantityColumn;
     @FXML
-    private TableColumn<Object, Float> priceColumn;
+    private TreeTableColumn<Object, Float> priceColumn;
     @FXML
-    private TableColumn<Object, Float> totalPriceColumn;
+    private TreeTableColumn<Object, Float> totalPriceColumn;
 
     @FXML
     private TextField nameField;
@@ -70,27 +65,49 @@ public class ManageProductsController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        unityColumn.setCellValueFactory(new PropertyValueFactory<>("unity"));
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalprice"));
+        idColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
+        unityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("unity"));
+        quantityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("quantity"));
+        priceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("price"));
+        totalPriceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalprice"));
 
-        productList = FXCollections.observableArrayList();
-        productTable.setItems(productList);
+        TreeItem<Object> rootItem = new TreeItem<>(new Object());
+        productTreeTable.setRoot(rootItem);
+        productTreeTable.setShowRoot(false);
 
         articleTypeList = FXCollections.observableArrayList(articleTypeService.getAllTypes());
-        articleTypeList.addAll(articleTypeService.getAllTypes());
         articleTypeComboBox.setItems(articleTypeList);
 
         articleList = FXCollections.observableArrayList(articleService.getAllArticles());
-        articleList.addAll(articleService.getAllArticles());
         articleComboBox.setItems(articleList);
 
         sArticleList = FXCollections.observableArrayList(sArticleService.getAllSarticles());
-        sArticleList.addAll(sArticleService.getAllSarticles());
         sArticleComboBox.setItems(sArticleList);
+
+        loadData();
+    }
+
+    private void loadData() {
+        TreeItem<Object> rootItem = productTreeTable.getRoot();
+        rootItem.getChildren().clear();
+
+        articleList.forEach(article -> {
+            TreeItem<Object> articleItem = new TreeItem<>(article);
+            rootItem.getChildren().add(articleItem);
+            article.getTypes().forEach(type -> {
+                TreeItem<Object> typeItem = new TreeItem<>(type);
+                articleItem.getChildren().add(typeItem);
+                type.getSousArticles().forEach(sArticle -> {
+                    TreeItem<Object> sArticleItem = new TreeItem<>(sArticle);
+                    typeItem.getChildren().add(sArticleItem);
+                    sArticle.getSsarticles().forEach(ssArticle -> {
+                        TreeItem<Object> ssArticleItem = new TreeItem<>(ssArticle);
+                        sArticleItem.getChildren().add(ssArticleItem);
+                    });
+                });
+            });
+        });
     }
 
     @FXML
@@ -101,40 +118,28 @@ public class ManageProductsController {
         String priceText = priceField.getText();
         String totalPriceText = totalPriceField.getText();
 
-        StringBuilder missingFields = new StringBuilder();
-
-        if (name.isEmpty()) missingFields.append("Name\n");
-        if (unity.isEmpty()) unity = null; // Allow unity to be null
-        if (quantityText.isEmpty()) quantityText = null; // Allow quantity to be null
-        if (priceText.isEmpty()) priceText = null; // Allow price to be null
-        if (totalPriceText.isEmpty()) totalPriceText = null; // Allow total price to be null
-
-        if (missingFields.length() > 0) {
-            showAlert("Validation Error", "Please fill the following fields:\n" + missingFields.toString());
+        if (name.isEmpty() || quantityText.isEmpty()) {
+            showAlert("Validation Error", "Name and Quantity are required.");
             return;
         }
 
         try {
             Article.ArticleBuilder articleBuilder = Article.builder()
-                    .name(name);
+                    .name(name)
+                    .unity(unity)
+                    .quantity(Integer.parseInt(quantityText));
 
-            if (unity != null) {
-                articleBuilder.unity(unity);
-            }
-            if (quantityText != null) {
-                articleBuilder.quantity(Integer.parseInt(quantityText));
-            }
-            if (priceText != null) {
+            if (!priceText.isEmpty()) {
                 articleBuilder.price(Float.parseFloat(priceText));
             }
-            if (totalPriceText != null) {
+            if (!totalPriceText.isEmpty()) {
                 articleBuilder.totalprice(Float.parseFloat(totalPriceText));
             }
 
             Article newArticle = articleBuilder.build();
             articleService.saveArticle(newArticle);
             articleList.add(newArticle);
-            productList.add(newArticle);
+            loadData();
             clearFields();
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
@@ -172,17 +177,8 @@ public class ManageProductsController {
         Article_type type = articleTypeComboBox.getValue();
         Article article = articleComboBox.getValue();
 
-        StringBuilder missingFields = new StringBuilder();
-
-        if (name.isEmpty()) missingFields.append("Name\n");
-        if (unity.isEmpty()) missingFields.append("Unity\n");
-        if (quantityText.isEmpty()) missingFields.append("Quantity\n");
-        if (priceText.isEmpty()) missingFields.append("Price\n");
-        if (totalPriceText.isEmpty()) missingFields.append("Total Price\n");
-        if (article == null) missingFields.append("Article\n");
-
-        if (missingFields.length() > 0) {
-            showAlert("Validation Error", "Please fill the following fields:\n" + missingFields.toString());
+        if (name.isEmpty() || unity.isEmpty() || quantityText.isEmpty() || article == null) {
+            showAlert("Validation Error", "Please fill all required fields.");
             return;
         }
 
@@ -191,15 +187,16 @@ public class ManageProductsController {
                     .name(name)
                     .unity(unity)
                     .quantity(Integer.parseInt(quantityText))
-                    .price(Float.parseFloat(priceText))
-                    .totalprice(Float.parseFloat(totalPriceText))
+                    .price(!priceText.isEmpty() ? Float.parseFloat(priceText) : 0)
+                    .totalprice(!totalPriceText.isEmpty() ? Float.parseFloat(totalPriceText) : 0)
                     .article(article)
                     .type(type)
                     .build();
+
             sArticleService.saveSarticle(newSArticle);
             sArticleList.add(newSArticle);
             sArticleComboBox.setItems(sArticleList);
-            productList.add(newSArticle);
+            loadData();
             clearFields();
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
@@ -215,17 +212,8 @@ public class ManageProductsController {
         String totalPriceText = totalPriceField.getText();
         sarticle sArticle = sArticleComboBox.getValue();
 
-        StringBuilder missingFields = new StringBuilder();
-
-        if (name.isEmpty()) missingFields.append("Name\n");
-        if (unity.isEmpty()) missingFields.append("Unity\n");
-        if (quantityText.isEmpty()) missingFields.append("Quantity\n");
-        if (priceText.isEmpty()) missingFields.append("Price\n");
-        if (totalPriceText.isEmpty()) missingFields.append("Total Price\n");
-        if (sArticle == null) missingFields.append("Sub-Article\n");
-
-        if (missingFields.length() > 0) {
-            showAlert("Validation Error", "Please fill the following fields:\n" + missingFields.toString());
+        if (name.isEmpty() || unity.isEmpty() || quantityText.isEmpty() || sArticle == null) {
+            showAlert("Validation Error", "Please fill all required fields.");
             return;
         }
 
@@ -234,13 +222,13 @@ public class ManageProductsController {
                     .name(name)
                     .unity(unity)
                     .quantity(Integer.parseInt(quantityText))
-                    .price(Float.parseFloat(priceText))
-                    .totalprice(Float.parseFloat(totalPriceText))
+                    .price(!priceText.isEmpty() ? Float.parseFloat(priceText) : 0)
+                    .totalprice(!totalPriceText.isEmpty() ? Float.parseFloat(totalPriceText) : 0)
                     .sarticle(sArticle)
                     .build();
 
             ssArticleService.saveSSarticle(newSSArticle);
-            productList.add(newSSArticle);
+            loadData();
             clearFields();
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
@@ -249,7 +237,7 @@ public class ManageProductsController {
 
     @FXML
     public void modifyProduct() {
-        Object selectedProduct = productTable.getSelectionModel().getSelectedItem();
+        Object selectedProduct = productTreeTable.getSelectionModel().getSelectedItem();
         if (selectedProduct != null) {
             if (selectedProduct instanceof Article) {
                 modifyArticle((Article) selectedProduct);
@@ -264,19 +252,20 @@ public class ManageProductsController {
     }
 
     private void modifyArticle(Article article) {
-        // Your modification logic here
+        // Implement logic to modify Article
+        // For example: populate the fields with the selected article data and allow the user to make changes
     }
 
     private void modifyArticleType(Article_type articleType) {
-        // Your modification logic here
+        // Implement logic to modify Article_type
     }
 
     private void modifySArticle(sarticle sArticle) {
-        // Your modification logic here
+        // Implement logic to modify sarticle
     }
 
     private void modifySSArticle(ssarticle ssArticle) {
-        // Your modification logic here
+        // Implement logic to modify ssarticle
     }
 
     private void clearFields() {
@@ -286,6 +275,9 @@ public class ManageProductsController {
         priceField.clear();
         totalPriceField.clear();
         typeNameField.clear();
+        articleComboBox.getSelectionModel().clearSelection();
+        articleTypeComboBox.getSelectionModel().clearSelection();
+        sArticleComboBox.getSelectionModel().clearSelection();
     }
 
     private void showAlert(String title, String message) {

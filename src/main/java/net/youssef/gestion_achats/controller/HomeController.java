@@ -22,8 +22,9 @@ public class HomeController {
 
     @FXML
     public void addOffre(ActionEvent event) throws IOException {
+        System.out.println("hello");
         // Load the Add Offre scene
-        dashboardController.loadContent("/views/addOffre.fxml");
+        dashboardController.loadContent("/views/addoffer.fxml");
     }
 
     @FXML
@@ -35,6 +36,6 @@ public class HomeController {
     @FXML
     public void manageProduits(ActionEvent event) throws IOException {
         // Load the Manage Produits scene
-        dashboardController.loadContent("/views/manageProduits.fxml");
+        dashboardController.loadContent("/views/manageProducts.fxml");
     }
 }

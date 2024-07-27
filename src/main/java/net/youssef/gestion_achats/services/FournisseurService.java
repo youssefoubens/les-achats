@@ -12,6 +12,7 @@ public class FournisseurService {
     @Autowired
     private FournisseurRepository fournisseurRepository;
 
+
     public List<Fournisseur> getAllFournisseurs() {
         return fournisseurRepository.findAll();
     }
@@ -26,5 +27,9 @@ public class FournisseurService {
 
     public void deleteFournisseur(Long id) {
         fournisseurRepository.deleteById(id);
+    }
+
+    public Fournisseur findByName(String name) {
+        return fournisseurRepository.findByName(name);
     }
 }

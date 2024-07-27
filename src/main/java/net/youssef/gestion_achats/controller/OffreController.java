@@ -59,7 +59,7 @@ public class OffreController {
         loadOffres();
     }
 
-    private void loadOffres() {
+    public void loadOffres() {
         List<offre> offres = offreService.getAllOffres();
         offreTable.setItems(FXCollections.observableArrayList(offres));
     }
@@ -73,4 +73,5 @@ public class OffreController {
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
+
 }

@@ -49,3 +49,53 @@
     -fx-font-size: 14px; /* Font size */
     -fx-border-radius: 5; /* Rounded corners */
 }
+/* Set the background color of the entire AnchorPane */
+.anchor-pane {
+    -fx-background-color: #87ceeb; /* Sky blue background */
+}
+.card {
+    -fx-background-color: #f0f0f0; /* Light gray background */
+    -fx-padding: 20;
+    -fx-border-radius: 10;
+    -fx-border-color: #cccccc; /* Light gray border */
+    -fx-border-width: 1px;
+    -fx-alignment: center;
+    -fx-pref-width: 200; /* Larger width for the card */
+    -fx-pref-height: 200; /* Larger height for the card */
+}
+
+.icon {
+    -fx-fill: #333;
+    -fx-fit-width: 100px; /* Increase icon size */
+    -fx-fit-height: 100px;/* Icon color */
+    -fx-alignment: center;
+}
+.description {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333; /* Text color */
+}
+
+.hidden-button {
+    -fx-background-color: transparent; /* Hide actual button background */
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+    -fx-opacity: 0; /* Make the actual button invisible */
+}
+
+.card:hover {
+    -fx-background-color: #007bff; /* Bold blue on hover */
+    -fx-text-fill: white; /* White text color on hover for better contrast */
+}
+.vbox-padding {
+    -fx-padding: 10 15 10 15; /* top right bottom left */
+}
+
+/* Style for VBox with background color */
+.form-background {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Style for Button alignment */
+.button-hbox {
+    -fx-alignment: center;
+}

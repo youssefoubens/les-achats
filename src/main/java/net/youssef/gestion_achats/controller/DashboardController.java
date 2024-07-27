@@ -17,7 +17,8 @@ import java.io.IOException;
 
 @Controller
 public class DashboardController {
-
+    @Autowired
+    private HomeController homeController;
     @Autowired
     private FxmlLoader fxmlLoader;
     @FXML
@@ -35,6 +36,10 @@ public class DashboardController {
         // Load the logo image
         Image logoImage = new Image(getClass().getResourceAsStream("/images/logo.png"));
         logoImageView.setImage(logoImage);
+
+        // Set DashboardController in HomeController
+        homeController.setDashboardController(this);
+
         // Load the home view by default
         loadContent("/views/home.fxml");
     }

@@ -2,13 +2,51 @@
 
 <?import javafx.geometry.Insets?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns:jfx="http://jfoenix.com/jfoenix" fx:controller="net.youssef.gestion_achats.controller.HomeController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns:jfx="http://jfoenix.com/jfoenix" fx:controller="net.youssef.gestion_achats.controller.HomeController" styleClass="anchor-pane">
     <padding>
-        <Insets top="10" right="20" bottom="30" left="40"/>
+        <Insets top="20" right="20" bottom="30" left="20"/>
     </padding>
-    <JFXButton text="Add Offer" layoutX="10" layoutY="50" onAction="#addOffre" styleClass="jfx-button"/>
-    <JFXButton text="Manage Suppliers" layoutX="10" layoutY="90" onAction="#manageFournisseurs" styleClass="jfx-button"/>
-    <JFXButton text="Manage Products" layoutX="10" layoutY="130" onAction="#manageProduits" styleClass="jfx-button"/>
+
+    <!-- Center the GridPane within the AnchorPane -->
+    <GridPane alignment="CENTER" hgap="50" vgap="20" layoutX="10" layoutY="120">
+        <!-- Card for "Add Offer" -->
+        <VBox alignment="CENTER" styleClass="card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <ImageView fitWidth="48" fitHeight="48" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                <image>
+                    <Image url="@/images/add_offer_icon.png"/> <!-- Path to the icon in the resources folder -->
+                </image>
+            </ImageView>
+            <Label  styleClass="description"/>
+            <JFXButton text="Add Offer" onAction="#addOffre" />
+        </VBox>
+
+        <!-- Card for "Manage Suppliers" -->
+        <VBox alignment="CENTER" styleClass="card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <ImageView fitWidth="48" fitHeight="48" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                <image>
+                    <Image url="@/images/manage_suppliers_icon.png"/> <!-- Path to the icon in the resources folder -->
+                </image>
+            </ImageView>
+            <Label  styleClass="description"/>
+            <JFXButton text="Manage Suppliers" onAction="#manageFournisseurs" />
+        </VBox>
+
+        <!-- Card for "Manage Products" -->
+        <VBox alignment="CENTER" styleClass="card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+            <ImageView fitWidth="48" fitHeight="48" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                <image>
+                    <Image url="@/images/manage_products_icon.png"/> <!-- Path to the icon in the resources folder -->
+                </image>
+            </ImageView>
+            <Label  styleClass="description"/>
+            <JFXButton text="Manage Products" onAction="#manageProduits"/>
+        </VBox>
+    </GridPane>
 </AnchorPane>

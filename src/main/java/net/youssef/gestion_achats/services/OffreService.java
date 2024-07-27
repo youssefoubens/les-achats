@@ -27,4 +27,6 @@ public class OffreService {
     public void deleteOffre(Long id) {
         offreRepository.deleteById(id);
     }
+
+
 }

@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.ManageProductsController">
-    <VBox alignment="CENTER" stylesheets="/views/style1.css">
-        <HBox alignment="CENTER" styleClass="hbox">
+    <VBox alignment="CENTER" spacing="10" stylesheets="/views/style1.css">
+        <HBox alignment="CENTER" spacing="10" styleClass="hbox">
             <TextField fx:id="nameField" promptText="Name" styleClass="text-field" />
             <TextField fx:id="unityField" promptText="Unity" styleClass="text-field" />
             <TextField fx:id="quantityField" promptText="Quantity" styleClass="text-field" />
@@ -13,14 +13,19 @@
             <TextField fx:id="totalPriceField" promptText="Total Price" styleClass="text-field" />
         </HBox>
 
-        <HBox alignment="CENTER" styleClass="hbox">
+        <HBox alignment="CENTER" spacing="10" styleClass="hbox">
             <TextField fx:id="typeNameField" promptText="Type Name" styleClass="text-field" />
-            <ComboBox fx:id="articleComboBox" promptText="Article" styleClass="combo-box" />
-            <ComboBox fx:id="articleTypeComboBox" promptText="Article Type" styleClass="combo-box" />
-            <ComboBox fx:id="sArticleComboBox" promptText="Sub-Article" styleClass="combo-box" />
+            <Label text="Select Article:" />
+            <ComboBox fx:id="articleComboBox" promptText="Select Article" />
+
+            <Label text="Select Article Type:" />
+            <ComboBox fx:id="articleTypeComboBox" promptText="Select Article Type" />
+
+            <Label text="Select Sub Article:" />
+            <ComboBox fx:id="sArticleComboBox" promptText="Select Sub Article" />
         </HBox>
 
-        <HBox alignment="CENTER" styleClass="hbox">
+        <HBox alignment="CENTER" spacing="10" styleClass="hbox">
             <Button text="Add Article" onAction="#addArticle" styleClass="button" />
             <Button text="Add Article Type" onAction="#addArticleType" styleClass="button" />
             <Button text="Add Sub-Article" onAction="#addSArticle" styleClass="button" />
@@ -29,15 +34,15 @@
             <Button text="Delete" onAction="#deleteProduct" styleClass="button" />
         </HBox>
 
-        <TreeTableView fx:id="productTreeTable" styleClass="tree-table-view">
+        <TableView fx:id="productTableView" styleClass="table-view" VBox.vgrow="ALWAYS">
             <columns>
-                <TreeTableColumn fx:id="idColumn" text="ID" />
-                <TreeTableColumn fx:id="nameColumn" text="Name" />
-                <TreeTableColumn fx:id="unityColumn" text="Unity" />
-                <TreeTableColumn fx:id="quantityColumn" text="Quantity" />
-                <TreeTableColumn fx:id="priceColumn" text="Price" />
-                <TreeTableColumn fx:id="totalPriceColumn" text="Total Price" />
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="100" />
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="200" />
+                <TableColumn fx:id="unityColumn" text="Unity" prefWidth="100" />
+                <TableColumn fx:id="quantityColumn" text="Quantity" prefWidth="100" />
+                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100" />
+                <TableColumn fx:id="totalPriceColumn" text="Total Price" prefWidth="100" />
             </columns>
-        </TreeTableView>
+        </TableView>
     </VBox>
 </AnchorPane>

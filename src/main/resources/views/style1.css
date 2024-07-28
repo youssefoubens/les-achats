@@ -1,41 +1,62 @@
-/* style1.css */
-
 .root {
-    -fx-font-family: "Arial";
+    -fx-font-family: 'Arial';
 }
 
 .text-field {
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-margin: 5px;
+    -fx-pref-width: 150px;
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ddd;
+    -fx-background-color: #f9f9f9;
 }
 
 .combo-box {
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-margin: 5px;
+    -fx-pref-width: 150px;
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ddd;
+    -fx-background-color: #f9f9f9;
 }
 
 .button {
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-background-color: #3c8dbc;
+    -fx-background-color: #007bff;
     -fx-text-fill: white;
-    -fx-margin: 5px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #0056b3;
+}
+
+.hbox {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
 }
 
 .tree-table-view {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 5px;
+}
+
+.tree-table-view .column-header-background {
+    -fx-background-color: #007bff;
+}
+
+.tree-table-view .column-header, .tree-table-view .tree-table-cell {
     -fx-background-color: #f9f9f9;
-    -fx-padding: 10px;
+    -fx-border-color: #ddd;
+    -fx-padding: 5px;
 }
 
-.tree-table-column {
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
+.tree-table-view .tree-table-row-cell:even {
+    -fx-background-color: #f1f1f1;
 }
 
-/* Additional styling for layout spacing and alignment */
-.hbox, .vbox {
-    -fx-padding: 15px;
-    -fx-spacing: 15px;
+.tree-table-view .tree-table-row-cell:odd {
+    -fx-background-color: #ffffff;
 }

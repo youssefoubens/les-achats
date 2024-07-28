@@ -1,10 +1,13 @@
 package net.youssef.gestion_achats.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +26,19 @@ public class ManageProductsController {
     private SSarticleservices ssArticleService;
 
     @FXML
-    private TreeTableView<Object> productTreeTable;
+    private TableView<Object> productTableView;
     @FXML
-    private TreeTableColumn<Object, Long> idColumn;
+    private TableColumn<Object, Long> idColumn;
     @FXML
-    private TreeTableColumn<Object, String> nameColumn;
+    private TableColumn<Object, String> nameColumn;
     @FXML
-    private TreeTableColumn<Object, String> unityColumn;
+    private TableColumn<Object, String> unityColumn;
     @FXML
-    private TreeTableColumn<Object, Integer> quantityColumn;
+    private TableColumn<Object, Integer> quantityColumn;
     @FXML
-    private TreeTableColumn<Object, Float> priceColumn;
+    private TableColumn<Object, Float> priceColumn;
     @FXML
-    private TreeTableColumn<Object, Float> totalPriceColumn;
+    private TableColumn<Object, Float> totalPriceColumn;
 
     @FXML
     private TextField nameField;
@@ -50,93 +53,129 @@ public class ManageProductsController {
     @FXML
     private TextField typeNameField;
     @FXML
-    private ComboBox<Article_type> articleTypeComboBox;
-    @FXML
     private ComboBox<Article> articleComboBox;
+    @FXML
+    private ComboBox<Article_type> articleTypeComboBox;
     @FXML
     private ComboBox<sarticle> sArticleComboBox;
 
-    private ObservableList<Article_type> articleTypeList;
-    private ObservableList<Article> articleList;
-    private ObservableList<sarticle> sArticleList;
-    private ObservableList<ssarticle> ssArticleList;
+    private ObservableList<Article> articleList = FXCollections.observableArrayList();
+    private ObservableList<Article_type> articleTypeList = FXCollections.observableArrayList();
+    private ObservableList<sarticle> sArticleList = FXCollections.observableArrayList();
+    private ObservableList<ssarticle> ssArticleList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Set up TreeTableColumn bindings
-        idColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
-        unityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("unity"));
-        quantityColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("quantity"));
-        priceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("price"));
-        totalPriceColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalprice"));
+        // Set up TableColumn bindings
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        unityColumn.setCellValueFactory(new PropertyValueFactory<>("unity"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalprice"));
 
-        // Set up ComboBoxes
-        articleTypeList = FXCollections.observableArrayList(articleTypeService.getAllTypes());
-        articleList = FXCollections.observableArrayList(articleService.getAllArticles());
-        sArticleList = FXCollections.observableArrayList(sArticleService.getAllSarticles());
-        ssArticleList = FXCollections.observableArrayList();
-        articleComboBox.setItems(articleList);
-
-        // Add listener to articleComboBox to update articleTypeComboBox items
-        articleComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                System.out.println("Selected Article: " + newValue.getName());
-                updateArticleTypeComboBox(newValue);
+        // Set up cell factory to handle hierarchical data
+        productTableView.setRowFactory(new Callback<TableView<Object>, TableRow<Object>>() {
+            @Override
+            public TableRow<Object> call(TableView<Object> tableView) {
+                return new TableRow<>() {
+                    @Override
+                    protected void updateItem(Object item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setStyle("");
+                        } else {
+                            if (item instanceof Article) {
+                                setStyle("-fx-background-color: lightblue;");
+                            } else if (item instanceof Article_type) {
+                                setStyle("-fx-background-color: lightgreen;");
+                            } else if (item instanceof sarticle) {
+                                setStyle("-fx-background-color: lightyellow;");
+                            } else if (item instanceof ssarticle) {
+                                setStyle("-fx-background-color: lightcoral;");
+                            }
+                        }
+                    }
+                };
             }
         });
 
-        // Load data into the TreeTableView
+        // Load and bind data
+        refreshDataFromDatabase();
+
         loadData();
+
+        // Bind ComboBox events
+        articleComboBox.setOnAction(event -> onArticleSelection());
+    }
+
+    private void refreshDataFromDatabase() {
+        articleTypeList.setAll(articleTypeService.getAllTypes());
+        articleList.setAll(articleService.getAllArticles());
+        sArticleList.setAll(sArticleService.getAllSarticles());
+        ssArticleList.setAll(ssArticleService.getAllSSarticles());
+
+        // Bind data to ComboBoxes
+        articleComboBox.setItems(articleList);
+        articleTypeComboBox.setItems(articleTypeList);
+        sArticleComboBox.setItems(sArticleList);
+
+        // Set default prompt text
+
     }
 
     private void updateArticleTypeComboBox(Article selectedArticle) {
-        // Filter article types based on the selected article
-        ObservableList<Article_type> filteredArticleTypes = FXCollections.observableArrayList();
-        for (Article_type type : articleTypeList) {
-            if (type.getArticle().equals(selectedArticle)) {
-                filteredArticleTypes.add(type);
+        if (selectedArticle != null) {
+            ObservableList<Article_type> filteredArticleTypes = FXCollections.observableArrayList();
+            for (Article_type type : articleTypeList) {
+                if (type.getArticle().equals(selectedArticle)) {
+                    filteredArticleTypes.add(type);
+                }
             }
+            articleTypeComboBox.setItems(filteredArticleTypes);
         }
-        articleTypeComboBox.setItems(filteredArticleTypes);
+    }
 
-        // Optionally update another ComboBox or list for sarticle
-        ObservableList<sarticle> filteredSArticles = FXCollections.observableArrayList();
-        for (sarticle sArticle : sArticleList) {
-            if (sArticle.getArticle().equals(selectedArticle)) {
-                filteredSArticles.add(sArticle);
+    private void updateSArticleComboBox(Article selectedArticle) {
+        if (selectedArticle != null) {
+            ObservableList<sarticle> filteredSArticles = FXCollections.observableArrayList();
+            for (sarticle sArticle : sArticleList) {
+                if (sArticle.getArticle().equals(selectedArticle)) {
+                    filteredSArticles.add(sArticle);
+                }
             }
+            sArticleComboBox.setItems(filteredSArticles);
         }
-        sArticleComboBox.setItems(filteredSArticles);
+    }
+
+    @FXML
+    public void onArticleSelection() {
+        Article selectedArticle = articleComboBox.getValue();
+        updateArticleTypeComboBox(selectedArticle);
+        updateSArticleComboBox(selectedArticle);
     }
 
     private void loadData() {
-        TreeItem<Object> rootItem = new TreeItem<>(new Object());
-        productTreeTable.setRoot(rootItem);
-        productTreeTable.setShowRoot(false);
+        ObservableList<Object> items = FXCollections.observableArrayList();
 
         // Loop through all articles
         for (Article article : articleList) {
-            TreeItem<Object> articleItem = new TreeItem<>(article);
-            rootItem.getChildren().add(articleItem);
+            items.add(article);
 
             if (article.getTypes() != null) {
                 // Loop through all article types for the current article
                 for (Article_type type : article.getTypes()) {
-                    TreeItem<Object> typeItem = new TreeItem<>(type);
-                    articleItem.getChildren().add(typeItem);
+                    items.add(type);
 
                     if (type.getSousArticles() != null) {
                         // Loop through all sub-articles for the current type
                         for (sarticle sArticle : type.getSousArticles()) {
-                            TreeItem<Object> sArticleItem = new TreeItem<>(sArticle);
-                            typeItem.getChildren().add(sArticleItem);
+                            items.add(sArticle);
 
                             if (sArticle.getSsarticles() != null) {
                                 // Loop through all sub-sub-articles for the current sub-article
                                 for (ssarticle ssArticle : sArticle.getSsarticles()) {
-                                    TreeItem<Object> ssArticleItem = new TreeItem<>(ssArticle);
-                                    sArticleItem.getChildren().add(ssArticleItem);
+                                    items.add(ssArticle);
                                 }
                             }
                         }
@@ -145,7 +184,7 @@ public class ManageProductsController {
             }
         }
 
-        productTreeTable.refresh();
+        productTableView.setItems(items);
     }
 
     @FXML
@@ -177,8 +216,10 @@ public class ManageProductsController {
             Article newArticle = articleBuilder.build();
             articleService.saveArticle(newArticle);
             articleList.add(newArticle);
+
             loadData();
             clearFields();
+
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
         }
@@ -206,21 +247,8 @@ public class ManageProductsController {
         clearFields();
         refreshDataFromDatabase();
         loadData();
-
-
     }
-    private void refreshDataFromDatabase() {
-        articleTypeList.clear();
-        articleTypeList.addAll(articleTypeService.getAllTypes());
 
-        articleList.clear();
-        articleList.addAll(articleService.getAllArticles());
-
-        sArticleList.clear();
-        sArticleList.addAll(sArticleService.getAllSarticles());
-        ssArticleList.clear();
-        ssArticleList.addAll(ssArticleService.getAllSSarticles());
-    }
     @FXML
     public void addSArticle() {
         String name = nameField.getText();
@@ -254,9 +282,6 @@ public class ManageProductsController {
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
         }
-        refreshDataFromDatabase();
-        loadData();
-        clearFields();
     }
 
     @FXML
@@ -266,9 +291,9 @@ public class ManageProductsController {
         String quantityText = quantityField.getText();
         String priceText = priceField.getText();
         String totalPriceText = totalPriceField.getText();
-        sarticle sArticle = sArticleComboBox.getValue();
+        sarticle selectedSArticle = sArticleComboBox.getValue();
 
-        if (name.isEmpty() || unity.isEmpty() || quantityText.isEmpty() || sArticle == null) {
+        if (name.isEmpty() || unity.isEmpty() || quantityText.isEmpty() || selectedSArticle == null) {
             showAlert("Validation Error", "Please fill all required fields.");
             return;
         }
@@ -280,70 +305,23 @@ public class ManageProductsController {
                     .quantity(Integer.parseInt(quantityText))
                     .price(!priceText.isEmpty() ? Float.parseFloat(priceText) : 0)
                     .totalprice(!totalPriceText.isEmpty() ? Float.parseFloat(totalPriceText) : 0)
-                    .sarticle(sArticle)
+                    .sarticle(selectedSArticle)
                     .build();
 
             ssArticleService.saveSSarticle(newSSArticle);
-            refreshDataFromDatabase();
-            loadData();
-            clearFields();
+            ssArticleList.add(newSSArticle);
+
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
         }
     }
 
-    @FXML
-    public void modifyProduct() {
-        TreeItem<Object> selectedItem = productTreeTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            Object selectedProduct = selectedItem.getValue();
-            if (selectedProduct instanceof Article) {
-                modifyArticle((Article) selectedProduct);
-            } else if (selectedProduct instanceof Article_type) {
-                modifyArticleType((Article_type) selectedProduct);
-            } else if (selectedProduct instanceof sarticle) {
-                modifySArticle((sarticle) selectedProduct);
-            } else if (selectedProduct instanceof ssarticle) {
-                modifySSArticle((ssarticle) selectedProduct);
-            }
-        }
-    }
-
-    private void modifyArticle(Article article) {
-        // Implement logic to modify Article
-    }
-
-    private void modifyArticleType(Article_type articleType) {
-        // Implement logic to modify Article_type
-    }
-
-    private void modifySArticle(sarticle sArticle) {
-        // Implement logic to modify sarticle
-    }
-
-    private void modifySSArticle(ssarticle ssArticle) {
-        // Implement logic to modify ssarticle
-    }
-
-    @FXML
-    public void deleteProduct() {
-        TreeItem<Object> selectedItem = productTreeTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            Object selectedProduct = selectedItem.getValue();
-            if (selectedProduct instanceof Article) {
-                articleService.deleteArticle(((Article) selectedProduct).getId());
-                articleList.remove(selectedProduct);
-            } else if (selectedProduct instanceof Article_type) {
-                articleTypeService.deleteType(((Article_type) selectedProduct).getId());
-                articleTypeList.remove(selectedProduct);
-            } else if (selectedProduct instanceof sarticle) {
-                sArticleService.deleteSarticle(((sarticle) selectedProduct).getId());
-                sArticleList.remove(selectedProduct);
-            } else if (selectedProduct instanceof ssarticle) {
-                ssArticleService.deleteSSarticle(((ssarticle) selectedProduct).getId());
-                loadData();
-            }
-        }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void clearFields() {
@@ -353,16 +331,14 @@ public class ManageProductsController {
         priceField.clear();
         totalPriceField.clear();
         typeNameField.clear();
-        articleComboBox.getSelectionModel().clearSelection();
-        articleTypeComboBox.getSelectionModel().clearSelection();
-        sArticleComboBox.getSelectionModel().clearSelection();
+
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    public void modifyProduct(ActionEvent actionEvent) {
+        System.out.println("modify");
+    }
+
+    public void deleteProduct(ActionEvent actionEvent) {
+        System.out.println("delete");
     }
 }

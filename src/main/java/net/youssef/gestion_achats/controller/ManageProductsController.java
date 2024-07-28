@@ -5,8 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TreeItem;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +59,7 @@ public class ManageProductsController {
     private ObservableList<Article_type> articleTypeList;
     private ObservableList<Article> articleList;
     private ObservableList<sarticle> sArticleList;
+    private ObservableList<ssarticle> ssArticleList;
 
     @FXML
     public void initialize() {
@@ -74,16 +73,41 @@ public class ManageProductsController {
 
         // Set up ComboBoxes
         articleTypeList = FXCollections.observableArrayList(articleTypeService.getAllTypes());
-        articleTypeComboBox.setItems(articleTypeList);
-
         articleList = FXCollections.observableArrayList(articleService.getAllArticles());
+        sArticleList = FXCollections.observableArrayList(sArticleService.getAllSarticles());
+        ssArticleList = FXCollections.observableArrayList();
         articleComboBox.setItems(articleList);
 
-        sArticleList = FXCollections.observableArrayList(sArticleService.getAllSarticles());
-        sArticleComboBox.setItems(sArticleList);
+        // Add listener to articleComboBox to update articleTypeComboBox items
+        articleComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                System.out.println("Selected Article: " + newValue.getName());
+                updateArticleTypeComboBox(newValue);
+            }
+        });
 
         // Load data into the TreeTableView
         loadData();
+    }
+
+    private void updateArticleTypeComboBox(Article selectedArticle) {
+        // Filter article types based on the selected article
+        ObservableList<Article_type> filteredArticleTypes = FXCollections.observableArrayList();
+        for (Article_type type : articleTypeList) {
+            if (type.getArticle().equals(selectedArticle)) {
+                filteredArticleTypes.add(type);
+            }
+        }
+        articleTypeComboBox.setItems(filteredArticleTypes);
+
+        // Optionally update another ComboBox or list for sarticle
+        ObservableList<sarticle> filteredSArticles = FXCollections.observableArrayList();
+        for (sarticle sArticle : sArticleList) {
+            if (sArticle.getArticle().equals(selectedArticle)) {
+                filteredSArticles.add(sArticle);
+            }
+        }
+        sArticleComboBox.setItems(filteredSArticles);
     }
 
     private void loadData() {
@@ -96,26 +120,33 @@ public class ManageProductsController {
             TreeItem<Object> articleItem = new TreeItem<>(article);
             rootItem.getChildren().add(articleItem);
 
-            // Loop through all article types for the current article
-            for (Article_type type : article.getTypes()) {
-                TreeItem<Object> typeItem = new TreeItem<>(type);
-                articleItem.getChildren().add(typeItem);
+            if (article.getTypes() != null) {
+                // Loop through all article types for the current article
+                for (Article_type type : article.getTypes()) {
+                    TreeItem<Object> typeItem = new TreeItem<>(type);
+                    articleItem.getChildren().add(typeItem);
 
-                // Loop through all sub-articles for the current type
-                for (sarticle sArticle : type.getSousArticles()) {
-                    TreeItem<Object> sArticleItem = new TreeItem<>(sArticle);
-                    typeItem.getChildren().add(sArticleItem);
+                    if (type.getSousArticles() != null) {
+                        // Loop through all sub-articles for the current type
+                        for (sarticle sArticle : type.getSousArticles()) {
+                            TreeItem<Object> sArticleItem = new TreeItem<>(sArticle);
+                            typeItem.getChildren().add(sArticleItem);
 
-                    // Loop through all sub-sub-articles for the current sub-article
-                    for (ssarticle ssArticle : sArticle.getSsarticles()) {
-                        TreeItem<Object> ssArticleItem = new TreeItem<>(ssArticle);
-                        sArticleItem.getChildren().add(ssArticleItem);
+                            if (sArticle.getSsarticles() != null) {
+                                // Loop through all sub-sub-articles for the current sub-article
+                                for (ssarticle ssArticle : sArticle.getSsarticles()) {
+                                    TreeItem<Object> ssArticleItem = new TreeItem<>(ssArticle);
+                                    sArticleItem.getChildren().add(ssArticleItem);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
 
+        productTreeTable.refresh();
+    }
 
     @FXML
     public void addArticle() {
@@ -170,10 +201,26 @@ public class ManageProductsController {
 
         articleTypeService.saveType(newType);
         articleTypeList.add(newType);
-        articleTypeComboBox.setItems(articleTypeList);
+        updateArticleTypeComboBox(selectedArticle); // Update the ComboBox to include the new type
         typeNameField.clear();
-    }
+        clearFields();
+        refreshDataFromDatabase();
+        loadData();
 
+
+    }
+    private void refreshDataFromDatabase() {
+        articleTypeList.clear();
+        articleTypeList.addAll(articleTypeService.getAllTypes());
+
+        articleList.clear();
+        articleList.addAll(articleService.getAllArticles());
+
+        sArticleList.clear();
+        sArticleList.addAll(sArticleService.getAllSarticles());
+        ssArticleList.clear();
+        ssArticleList.addAll(ssArticleService.getAllSSarticles());
+    }
     @FXML
     public void addSArticle() {
         String name = nameField.getText();
@@ -203,11 +250,13 @@ public class ManageProductsController {
             sArticleService.saveSarticle(newSArticle);
             sArticleList.add(newSArticle);
             sArticleComboBox.setItems(sArticleList);
-            loadData();
-            clearFields();
+
         } catch (NumberFormatException e) {
             showAlert("Input Error", "Please enter valid numbers for Quantity, Price, and Total Price.");
         }
+        refreshDataFromDatabase();
+        loadData();
+        clearFields();
     }
 
     @FXML
@@ -235,6 +284,7 @@ public class ManageProductsController {
                     .build();
 
             ssArticleService.saveSSarticle(newSSArticle);
+            refreshDataFromDatabase();
             loadData();
             clearFields();
         } catch (NumberFormatException e) {
@@ -244,8 +294,9 @@ public class ManageProductsController {
 
     @FXML
     public void modifyProduct() {
-        Object selectedProduct = productTreeTable.getSelectionModel().getSelectedItem();
-        if (selectedProduct != null) {
+        TreeItem<Object> selectedItem = productTreeTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            Object selectedProduct = selectedItem.getValue();
             if (selectedProduct instanceof Article) {
                 modifyArticle((Article) selectedProduct);
             } else if (selectedProduct instanceof Article_type) {
@@ -272,6 +323,27 @@ public class ManageProductsController {
 
     private void modifySSArticle(ssarticle ssArticle) {
         // Implement logic to modify ssarticle
+    }
+
+    @FXML
+    public void deleteProduct() {
+        TreeItem<Object> selectedItem = productTreeTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            Object selectedProduct = selectedItem.getValue();
+            if (selectedProduct instanceof Article) {
+                articleService.deleteArticle(((Article) selectedProduct).getId());
+                articleList.remove(selectedProduct);
+            } else if (selectedProduct instanceof Article_type) {
+                articleTypeService.deleteType(((Article_type) selectedProduct).getId());
+                articleTypeList.remove(selectedProduct);
+            } else if (selectedProduct instanceof sarticle) {
+                sArticleService.deleteSarticle(((sarticle) selectedProduct).getId());
+                sArticleList.remove(selectedProduct);
+            } else if (selectedProduct instanceof ssarticle) {
+                ssArticleService.deleteSSarticle(((ssarticle) selectedProduct).getId());
+                loadData();
+            }
+        }
     }
 
     private void clearFields() {

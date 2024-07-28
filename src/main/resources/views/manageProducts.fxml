@@ -26,6 +26,7 @@
             <Button text="Add Sub-Article" onAction="#addSArticle" styleClass="button" />
             <Button text="Add Sub-Sub-Article" onAction="#addSSArticle" styleClass="button" />
             <Button text="Modify" onAction="#modifyProduct" styleClass="button" />
+            <Button text="Delete" onAction="#deleteProduct" styleClass="button" />
         </HBox>
 
         <TreeTableView fx:id="productTreeTable" styleClass="tree-table-view">

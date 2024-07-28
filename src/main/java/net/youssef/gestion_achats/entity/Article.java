@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
@@ -21,8 +23,8 @@ public class Article {
     private int quantity;
     private float price;
     private float totalprice;
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    public List<Article_type> types;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Article_type> types = new ArrayList<>();
 
     // getters and setters
     @Override
@@ -30,4 +32,12 @@ public class Article {
     public String toString() {
         return name; // Display name in the ComboBox
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Objects.equals(id, article.id);
+    }
 }
+

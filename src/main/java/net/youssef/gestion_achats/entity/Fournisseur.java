@@ -21,7 +21,8 @@ public class Fournisseur {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "fournisseur", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<offre> offres;
 
     // getters and setters

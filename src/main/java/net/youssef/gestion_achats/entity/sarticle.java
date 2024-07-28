@@ -28,7 +28,7 @@ public class sarticle {
     @ManyToOne
     @JoinColumn(name = "Article_id")
     private Article article;
-    @OneToMany(mappedBy = "sarticle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sarticle", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ssarticle> ssarticles;
 @Override
     public String toString() {

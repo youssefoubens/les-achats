@@ -27,7 +27,7 @@ public class consultation {
 
     @ManyToOne
     @JoinColumn(name = "sarticle_id")
-    private ssarticle ssArticle;
+    private sarticle sArticle;
 
     @ManyToOne
     @JoinColumn(name = "ssarticle_id")

@@ -1,0 +1,39 @@
+/* Apply styling to the GridPane */
+GridPane {
+    -fx-padding: 20;
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* Style for the ComboBox */
+ComboBox {
+    -fx-pref-width: 200px;
+}
+
+/* Style for the TextArea */
+TextArea {
+    -fx-pref-width: 300px;
+}
+
+/* Style specifically for the emailSubject TextArea */
+#emailSubject {
+    -fx-pref-height: 50px;
+    -fx-pref-width: 300px;
+}
+
+/* Style for the Button */
+Button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+}
+
+/* Style for the Labels */
+Label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}

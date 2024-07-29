@@ -2,7 +2,6 @@ package net.youssef.gestion_achats.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
-
 @Controller
 public class ConsultationController {
+
     @FXML
     private TableView<consultation> consultationTable;
 
@@ -40,19 +39,21 @@ public class ConsultationController {
 
     @Autowired
     private ConsultationService consultationService;
+
     private DashboardController dashboardController;
+
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
+
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        // Handle null values and return a property for the cell
         fournisseurColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getFournisseur() != null) {
                 return new SimpleStringProperty(cellData.getValue().getFournisseur().getEmail());
             } else {
-                return null;
+                return new SimpleStringProperty(""); // Handle null values gracefully
             }
         });
 
@@ -60,15 +61,15 @@ public class ConsultationController {
             if (cellData.getValue().getArticle() != null) {
                 return new SimpleStringProperty(cellData.getValue().getArticle().getName());
             } else {
-                return null;
+                return new SimpleStringProperty(""); // Handle null values gracefully
             }
         });
 
         sousArticleColumn.setCellValueFactory(cellData -> {
-            if (cellData.getValue().getSsArticle() != null) {
-                return new SimpleStringProperty();
+            if (cellData.getValue().getSArticle() != null) {
+                return new SimpleStringProperty(cellData.getValue().getSArticle().getName()); // Assuming getName() method exists
             } else {
-                return null;
+                return new SimpleStringProperty(""); // Handle null values gracefully
             }
         });
 
@@ -76,11 +77,11 @@ public class ConsultationController {
             if (cellData.getValue().getSousSousArticle() != null) {
                 return new SimpleStringProperty(cellData.getValue().getSousSousArticle().getName());
             } else {
-                return null;
+                return new SimpleStringProperty(""); // Handle null values gracefully
             }
         });
 
-        dateConsultationColumn.setCellValueFactory(new PropertyValueFactory<>("dateConsultation"));
+        dateConsultationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateConsultation().toString()));
 
         loadConsultations();
     }
@@ -89,6 +90,4 @@ public class ConsultationController {
         List<consultation> consultations = consultationService.getAllConsultations();
         consultationTable.setItems(FXCollections.observableArrayList(consultations));
     }
-
-
 }

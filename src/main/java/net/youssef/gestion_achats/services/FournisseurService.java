@@ -32,4 +32,8 @@ public class FournisseurService {
     public Fournisseur findByName(String name) {
         return fournisseurRepository.findByName(name);
     }
+
+    public List<Fournisseur> findAll() {
+        return fournisseurRepository.findAll();
+    }
 }

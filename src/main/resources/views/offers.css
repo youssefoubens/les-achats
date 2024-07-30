@@ -1,0 +1,40 @@
+/* Root styles */
+.root {
+    -fx-background-color: #f7f9fc; /* Light blueish background */
+}
+
+/* TableView styles */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+    -fx-font-size: 14px; /* Larger font for better readability */
+}
+
+/* Column header styles */
+.table-view .column-header {
+    /* Dark blue for header */
+    -fx-text-fill: white;
+    -fx-font-size: 16px; /* Larger font for header */
+    -fx-font-weight: bold;
+    -fx-border-color: #dcdcdc;
+}
+
+/* Cell styles */
+.table-view .cell {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #2c3e50; /* Dark text */
+    -fx-font-size: 14px; /* Larger font for better readability */
+}
+
+/* Selected cell styles */
+.table-view .cell:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* Row hover styles */
+.table-view .row:hover {
+    -fx-background-color: #f0f0f0; /* Light gray on hover */
+}

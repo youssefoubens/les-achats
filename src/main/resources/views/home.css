@@ -1,0 +1,50 @@
+/* Root styling for the anchor pane */
+.anchor-pane {
+    -fx-background-color: #87ceeb; /* Sky blue background */
+}
+
+/* Card styling */
+.card {
+    -fx-background-color: #f0f0f0; /* Light gray background */
+    -fx-padding: 20;
+    -fx-border-radius: 10;
+    -fx-border-color: #cccccc; /* Light gray border */
+    -fx-border-width: 1px;
+    -fx-pref-width: 210; /* Reduced width for the card */
+    -fx-pref-height: 190; /* Reduced height for the card */
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-spacing: 15; /* Space between elements within the card */
+}
+
+.card:hover {
+    -fx-background-color: #007bff; /* Blue background on hover */
+    -fx-text-fill: white; /* White text on hover */
+}
+
+.icon {
+    -fx-fit-width: 80px; /* Icon size */
+    -fx-fit-height: 80px;
+    -fx-alignment: center;
+}
+
+.description {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333; /* Text color */
+    -fx-padding: 10 0 10 0; /* Spacing above and below text */
+    -fx-alignment: center;
+}
+
+/* Green button style */
+.green-button {
+    -fx-background-color: #4caf50; /* Green background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 14px;
+    -fx-padding: 10 20; /* Padding inside the button */
+    -fx-cursor: hand; /* Pointer cursor */
+    -fx-background-radius: 5; /* Rounded corners */
+}
+
+.green-button:hover {
+    -fx-background-color: #388e3c; /* Darker green on hover */
+}

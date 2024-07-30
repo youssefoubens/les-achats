@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.ManageProductsController">
-    <VBox alignment="CENTER" spacing="10" stylesheets="/views/style1.css">
+    <VBox alignment="CENTER" spacing="10" stylesheets="/views/manageproduct.css">
         <HBox alignment="CENTER" spacing="10" styleClass="hbox">
             <TextField fx:id="nameField" promptText="Name" styleClass="text-field" />
             <TextField fx:id="unityField" promptText="Unity" styleClass="text-field" />
@@ -36,12 +36,12 @@
 
         <TableView fx:id="productTableView" styleClass="table-view" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="100" />
-                <TableColumn fx:id="nameColumn" text="Name" prefWidth="200" />
-                <TableColumn fx:id="unityColumn" text="Unity" prefWidth="100" />
-                <TableColumn fx:id="quantityColumn" text="Quantity" prefWidth="100" />
-                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100" />
-                <TableColumn fx:id="totalPriceColumn" text="Total Price" prefWidth="100" />
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50" />
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="350" />
+                <TableColumn fx:id="unityColumn" text="Unity" prefWidth="50" />
+                <TableColumn fx:id="quantityColumn" text="Quantity" prefWidth="150" />
+                <TableColumn fx:id="priceColumn" text="Price" prefWidth="200" />
+                <TableColumn fx:id="totalPriceColumn" text="Total Price" prefWidth="200" />
             </columns>
         </TableView>
     </VBox>

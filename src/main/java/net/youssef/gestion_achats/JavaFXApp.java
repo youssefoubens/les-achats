@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import net.youssef.gestion_achats.controller.DashboardController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,11 +39,12 @@ public class JavaFXApp extends Application {
         controller.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/views/styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/views/dashboard.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Dashboard");
-        primaryStage.setMinWidth(1150);
+        primaryStage.setMinWidth(1160);
         primaryStage.setMinHeight(600);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

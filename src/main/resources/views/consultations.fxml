@@ -2,25 +2,23 @@
 
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.ConsultationController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"  fx:controller="net.youssef.gestion_achats.controller.ConsultationController"  stylesheets="/views/consultations.css">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     <children>
-        <TableView fx:id="consultationTable" layoutX="20.0" layoutY="20.0" prefHeight="400.0" prefWidth="600.0">
+        <TableView fx:id="consultationTable" layoutX="15.0" layoutY="5.0" prefWidth="1000" prefHeight="500" styleClass="consultation-table">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" />
-                <TableColumn fx:id="fournisseurColumn" text="Fournisseur" />
-                <TableColumn fx:id="articleColumn" text="Article" />
-                <TableColumn fx:id="sousArticleColumn" text="Sous-Article" />
-                <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" />
-                <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" />
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50.0" />
+                <TableColumn fx:id="fournisseurColumn" text="Fournisseur" prefWidth="250" />
+                <TableColumn fx:id="articleColumn" text="Article" prefWidth="250" />
+                <TableColumn fx:id="sousArticleColumn" text="Sous-Article" prefWidth="200" />
+                <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" prefWidth="200" />
+                <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" prefWidth="100" />
             </columns>
         </TableView>
-
     </children>
 </AnchorPane>

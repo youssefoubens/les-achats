@@ -19,8 +19,7 @@ public class ConsultationController {
     @FXML
     private TableView<consultation> consultationTable;
 
-    @FXML
-    private TableColumn<consultation, Long> idColumn;
+
 
     @FXML
     private TableColumn<consultation, String> fournisseurColumn;
@@ -47,7 +46,6 @@ public class ConsultationController {
     }
 
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         fournisseurColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getFournisseur() != null) {

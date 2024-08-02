@@ -1,10 +1,9 @@
 package net.youssef.gestion_achats.services;
 
-import net.youssef.gestion_achats.entity.Article;
-import net.youssef.gestion_achats.entity.sarticle;
-import net.youssef.gestion_achats.entity.ssarticle;
+import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.entity.ssarticle;
 import net.youssef.gestion_achats.repository.SSarticleRepository;
+import net.youssef.gestion_achats.repository.SarticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

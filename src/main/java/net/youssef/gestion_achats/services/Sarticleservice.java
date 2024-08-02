@@ -16,6 +16,8 @@ public class Sarticleservice {
     private SarticleRepository sarticleRepository;
     @Autowired
     private SarticleRepository sArticleRepository;
+
+
     @Transactional(readOnly = true)
     public List<sarticle> getAllSarticles() {
         // Fetch all sarticles with an open transaction

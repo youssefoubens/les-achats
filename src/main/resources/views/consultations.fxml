@@ -12,12 +12,11 @@
     <children>
         <TableView fx:id="consultationTable" layoutX="15.0" layoutY="5.0" prefWidth="1000" prefHeight="500" styleClass="consultation-table">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50.0" />
-                <TableColumn fx:id="fournisseurColumn" text="Fournisseur" prefWidth="250" />
                 <TableColumn fx:id="articleColumn" text="Article" prefWidth="250" />
                 <TableColumn fx:id="sousArticleColumn" text="Sous-Article" prefWidth="200" />
                 <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" prefWidth="200" />
-                <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" prefWidth="100" />
+                <TableColumn fx:id="fournisseurColumn" text="Fournisseur" prefWidth="250" />
+                <TableColumn fx:id="dateConsultationColumn" text="trace de consultaion" prefWidth="100" />
             </columns>
         </TableView>
     </children>

@@ -1,7 +1,11 @@
 package net.youssef.gestion_achats.controller;
 
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import net.youssef.gestion_achats.entity.Fournisseur;
 import net.youssef.gestion_achats.services.FournisseurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +39,12 @@ public class FournisseurController {
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(cellData -> {cellData.getValue().getId();
-            return null;
-        });
-        nameColumn.setCellValueFactory(cellData -> {cellData.getValue().getName();
-            return null;
-        });
-        emailColumn.setCellValueFactory(cellData -> {cellData.getValue().getEmail(); return null;
-        });
+        // Initialize the TableView columns
+        idColumn.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
 
+        // Load initial data
         updateTable();
     }
 

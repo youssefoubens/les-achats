@@ -18,6 +18,8 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String N;
+    private String famille;
     private String name;
     private String unity;
     private int quantity;
@@ -25,7 +27,11 @@ public class Article {
     private float totalprice;
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Article_type> types = new ArrayList<>();
-
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<sarticle> sarticles = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "bordereau_id")
+    private BORDEREAU bordereau;
     // getters and setters
     @Override
    
@@ -38,6 +44,10 @@ public class Article {
         if (o == null || getClass() != o.getClass()) return false;
         Article article = (Article) o;
         return Objects.equals(id, article.id);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 

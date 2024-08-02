@@ -46,5 +46,11 @@ public class Articletypeservice {
     }
 
 
+    public List<Article_type> findByArticle(Article article) {
+        return articleTypeRepository.findByArticle(article);
+    }
 
+    public void deleteArticleType(Article_type articleType) {
+        // Implementation to delete articleType
+    }
 }

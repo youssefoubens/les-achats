@@ -51,7 +51,7 @@
                 </image>
             </ImageView>
             <Label text="Manage Products" styleClass="description"/>
-            <JFXButton text="Manage Products" onAction="#manageProduits" styleClass="green-button"/>
+            <JFXButton text="Gestion des Bordereaux" onAction="#manageProduits" styleClass="green-button"/>
         </VBox>
     </GridPane>
 

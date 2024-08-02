@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
@@ -18,6 +19,7 @@ public class sarticle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String N;
     private String unity;
     private int quantity;
     private float price;
@@ -33,5 +35,9 @@ public class sarticle {
 @Override
     public String toString() {
         return name; // Display name in the ComboBox
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

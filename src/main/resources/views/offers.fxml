@@ -7,10 +7,9 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.OffreController" stylesheets="/views/offers.css">
     <TableView fx:id="offreTable" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" styleClass="table-view">
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="100" />
+            <TableColumn fx:id="articleColumn" text="Article" prefWidth="200" />
             <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="200" />
             <TableColumn fx:id="fournisseurColumn" text="Fournisseur" prefWidth="200" />
-            <TableColumn fx:id="articleColumn" text="Article" prefWidth="200" />
             <TableColumn fx:id="sousArticleColumn" text="Sous-Article" prefWidth="150" />
             <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" prefWidth="150" />
         </columns>

@@ -19,8 +19,7 @@ public class OffreController {
     @FXML
     private TableView<offre> offreTable;
 
-    @FXML
-    private TableColumn<offre, Long> idColumn;
+
 
     @FXML
     private TableColumn<offre, String> descriptionColumn;
@@ -41,7 +40,7 @@ public class OffreController {
     private OffreService offreService;
 
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        //idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         fournisseurColumn.setCellValueFactory(cellData -> {cellData.getValue().getFournisseur().getEmail();
             return null;

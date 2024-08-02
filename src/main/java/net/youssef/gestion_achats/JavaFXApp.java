@@ -44,7 +44,7 @@ public class JavaFXApp extends Application {
         primaryStage.setTitle("Dashboard");
         primaryStage.setMinWidth(1160);
         primaryStage.setMinHeight(600);
-        primaryStage.setResizable(false);
+
         primaryStage.show();
     }
 

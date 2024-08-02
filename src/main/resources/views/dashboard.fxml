@@ -12,8 +12,8 @@
             <ImageView fx:id="logoImageView" fitWidth="150" preserveRatio="true" styleClass="logo"/>
             <VBox fx:id="buttonContainer" spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
                 <Button text="Home" onAction="#showHome" />
-                <Button text="Liste de Consultation" onAction="#viewConsultations" />
-                <Button text="Liste des Offres" onAction="#viewOffers" />
+                <Button text="Liste des Consultations" onAction="#viewConsultations" />
+                <Button text="Offre des Fournisseurs" onAction="#viewOffers" />
                 <Button text="Consulter" onAction="#consult" />
             </VBox>
             <Button text="Exit" onAction="#exitApplication" styleClass="exit-button"/>

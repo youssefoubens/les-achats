@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface Article_TypeRepository extends JpaRepository<Article_type,Long>{
     Article_type findByName(String name);
+    List<Article_type> findByArticle(Article article);
 
-
-
+    void deleteAllByArticle(Article article);
 }
 

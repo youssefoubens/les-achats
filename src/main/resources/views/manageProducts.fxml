@@ -5,13 +5,6 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.ManageProductsController">
     <VBox alignment="CENTER" spacing="10" stylesheets="/views/manageproduct.css">
-        <HBox alignment="CENTER" spacing="10" styleClass="hbox">
-            <TextField fx:id="nameField" promptText="Name" styleClass="text-field" />
-            <TextField fx:id="unityField" promptText="Unity" styleClass="text-field" />
-            <TextField fx:id="quantityField" promptText="Quantity" styleClass="text-field" />
-            <TextField fx:id="priceField" promptText="Price" styleClass="text-field" />
-            <TextField fx:id="totalPriceField" promptText="Total Price" styleClass="text-field" />
-        </HBox>
 
         <HBox alignment="CENTER" spacing="10" styleClass="hbox">
             <TextField fx:id="typeNameField" promptText="Type Name" styleClass="text-field" />
@@ -26,23 +19,26 @@
         </HBox>
 
         <HBox alignment="CENTER" spacing="10" styleClass="hbox">
-            <Button text="Add Article" onAction="#addArticle" styleClass="button" />
-            <Button text="Add Article Type" onAction="#addArticleType" styleClass="button" />
-            <Button text="Add Sub-Article" onAction="#addSArticle" styleClass="button" />
-            <Button text="Add Sub-Sub-Article" onAction="#addSSArticle" styleClass="button" />
-            <Button text="Modify" onAction="#modifyProduct" styleClass="button" />
-            <Button text="Delete" onAction="#deleteProduct" styleClass="button" />
+            <Button text="Upload" onAction="#handleUpload" />
+            <Button text="Select Bordereau" onAction="#selectBordereau" styleClass="button" />
+            <Button text="Delete Bordereau" onAction="#deleteBordereauAndRelatedEntities" styleClass="button" />
+            <Button text="Modifier Bordereau" onAction="#ModifierBordereau" styleClass="button" />
+            <ProgressBar fx:id="progressBar" visible="false" prefWidth="200" />
         </HBox>
 
         <TableView fx:id="productTableView" styleClass="table-view" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="50" />
-                <TableColumn fx:id="nameColumn" text="Name" prefWidth="350" />
-                <TableColumn fx:id="unityColumn" text="Unity" prefWidth="50" />
-                <TableColumn fx:id="quantityColumn" text="Quantity" prefWidth="150" />
-                <TableColumn fx:id="priceColumn" text="Price" prefWidth="200" />
-                <TableColumn fx:id="totalPriceColumn" text="Total Price" prefWidth="200" />
+                <TableColumn fx:id="numberColumn" text="N°" prefWidth="100" />
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="200" />
+                <TableColumn fx:id="unityColumn" text="U" prefWidth="100" />
+                <TableColumn fx:id="quantityColumn" text="Qté" prefWidth="100" />
+                <TableColumn fx:id="priceColumn" text="P.U DH/HT" prefWidth="150" />
+                <TableColumn fx:id="totalPriceColumn" text="P. T DH/HT" prefWidth="150" />
             </columns>
+
         </TableView>
+
     </VBox>
+
 </AnchorPane>
+

@@ -1,6 +1,7 @@
 package net.youssef.gestion_achats.services;
 
 import net.youssef.gestion_achats.entity.Article;
+import net.youssef.gestion_achats.entity.BORDEREAU;
 import net.youssef.gestion_achats.repository.Articlerepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,14 @@ public class ArticleService {
             Hibernate.initialize(article.getTypes());
         }
         return article;
+    }
+
+    public void saveAllArticles(List<Article> articles) {
+        articleRepository.saveAll(articles);
+    }
+
+    public List<Article> getArticlesByBordereau(BORDEREAU bordereau) {
+        // Implement the method logic here
+        return articleRepository.findByBordereau(bordereau);
     }
 }

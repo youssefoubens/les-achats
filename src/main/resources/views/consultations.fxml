@@ -12,6 +12,7 @@
     <children>
         <TableView fx:id="consultationTable" layoutX="15.0" layoutY="5.0" prefWidth="1000" prefHeight="500" styleClass="consultation-table">
             <columns>
+
                 <TableColumn fx:id="articleColumn" text="Article" prefWidth="250" />
                 <TableColumn fx:id="sousArticleColumn" text="Sous-Article" prefWidth="200" />
                 <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" prefWidth="200" />

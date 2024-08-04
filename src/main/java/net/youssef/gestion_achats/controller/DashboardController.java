@@ -1,5 +1,6 @@
 package net.youssef.gestion_achats.controller;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
@@ -20,7 +21,10 @@ public class DashboardController {
     @Autowired
     private HomeController homeController;
     @Autowired
+
     private FxmlLoader fxmlLoader;
+    @Autowired
+    ManageProductsController manageProductsController;
     @FXML
     private ImageView logoImageView;
     private Stage primaryStage;
@@ -39,7 +43,7 @@ public class DashboardController {
 
         // Set DashboardController in HomeController
         homeController.setDashboardController(this);
-
+        manageProductsController.setDashboardController(this);
         // Load the home view by default
         loadContent("/views/home.fxml");
     }
@@ -79,8 +83,27 @@ public class DashboardController {
         try {
             Parent newContent = fxmlLoader.load(fxmlPath);
             contentPane.getChildren().setAll(newContent);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    public void loadContent(String fxmlPath, String parameter) {
+        try {
+            FXMLLoader loader = fxmlLoader.getLoader(fxmlPath);
+            Parent newContent = loader.load();
+
+            // Pass the parameter to the new controller
+            BordereauEnreprise controller = loader.getController();
+            controller.setBordereauNumber(parameter);
+
+            // Set the new content to the appropriate part of your UI
+            contentPane.getChildren().setAll(newContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

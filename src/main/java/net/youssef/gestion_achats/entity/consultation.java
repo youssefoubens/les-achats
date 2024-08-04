@@ -1,16 +1,18 @@
 package net.youssef.gestion_achats.entity;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class consultation {
     @Id
@@ -33,5 +35,11 @@ public class consultation {
     @JoinColumn(name = "ssarticle_id")
     private ssarticle sousSousArticle;
 
-    private LocalDate dateConsultation;
+    private LocalDateTime dateConsultation;
+
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PieceJointe> piecesJointes;
+
+    // Store paths or URLs to the files
 }
+

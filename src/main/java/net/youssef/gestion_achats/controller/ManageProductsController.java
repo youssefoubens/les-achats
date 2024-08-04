@@ -6,15 +6,21 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import net.youssef.gestion_achats.AppContext;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.entity.Separator;
 import net.youssef.gestion_achats.services.*;
@@ -45,6 +51,7 @@ public class ManageProductsController {
 
     @Autowired
     private BordereauService bordereauService;
+
     @FXML
     private TableView<Object> productTableView;
     @FXML
@@ -60,18 +67,7 @@ public class ManageProductsController {
     @FXML
     private TableColumn<Object, Float> totalPriceColumn;
 
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField unityField;
-    @FXML
-    private TextField quantityField;
-    @FXML
-    private TextField priceField;
-    @FXML
-    private TextField totalPriceField;
-    @FXML
-    private TextField typeNameField;
+
     @FXML
     private ComboBox<Article> articleComboBox;
     @FXML
@@ -84,12 +80,19 @@ public class ManageProductsController {
     private ObservableList<Article_type> articleTypeList = FXCollections.observableArrayList();
     private ObservableList<sarticle> sArticleList = FXCollections.observableArrayList();
     private ObservableList<ssarticle> ssArticleList = FXCollections.observableArrayList();
-
+    private DashboardController dashboardController;
+    private long selectedBordereau;
+    @FXML
+    private Button modifierBordereauButton;
+    public void setDashboardController(DashboardController dashboardController) {
+        this.dashboardController = dashboardController;
+    }
     @FXML
     private void initialize() {
         productTableView.setEditable(true);
         configureTableColumns();
         productTableView.setItems(FXCollections.observableArrayList());
+
         //refreshDataFromDatabase(); // Load data from the database on startup
     }
 
@@ -156,9 +159,9 @@ public class ManageProductsController {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
                     System.out.println("empty");
-                }else if (item instanceof Separator) {
-                    setStyle("-fx-background-color: lightgray; -fx-font-style: italic;");}
-                    else {
+                } else if (item instanceof Separator) {
+                    setStyle("-fx-background-color: lightgray; -fx-font-style: italic;");
+                } else {
                     if (item instanceof Article) {
                         setStyle("-fx-background-color: lightblue;");
                     } else if (item instanceof Article_type) {
@@ -237,7 +240,6 @@ public class ManageProductsController {
     }
 
 
-
     @FXML
     private void handleUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -254,7 +256,7 @@ public class ManageProductsController {
             System.out.println("Processing file: " + file.getAbsolutePath());
             BORDEREAU newBordereau = new BORDEREAU();
             bordereauService.saveBordereau(newBordereau);
-            processFile(file,newBordereau);
+            processFile(file, newBordereau);
         }
     }
 
@@ -328,9 +330,11 @@ public class ManageProductsController {
             return null;
         });
 
-        dialog.showAndWait().ifPresent(selectedBordereau -> {
+        dialog.showAndWait().ifPresent(selectedBorderea -> {
+            selectedBordereau = selectedBorderea.getIdB();
             System.out.println("Selected Bordereau: " + selectedBordereau);
-            loadDataByBordereau(selectedBordereau);
+            loadDataByBordereau(selectedBorderea);
+            modifierBordereauButton.setVisible(true);
         });
     }
 
@@ -384,7 +388,7 @@ public class ManageProductsController {
                         super.failed();
                         // Hide progress bar and handle error
                         progressBar.setVisible(false);
-                       // showError("Deletion failed.");
+                        // showError("Deletion failed.");
                     }
                 };
 
@@ -424,7 +428,7 @@ public class ManageProductsController {
         }
     }
 
-    private void processFile(File file,BORDEREAU bordereau) {
+    private void processFile(File file, BORDEREAU bordereau) {
         try (FileInputStream fis = new FileInputStream(file);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
@@ -462,7 +466,7 @@ public class ManageProductsController {
                 if (cellNumber != null && cellNumber.intValue() > 0) {
                     System.out.println("Processing Article: " + cellValue);
                     currentArticle = Article.builder()
-                            .N(cellValue)
+                            .n(cellValue)
                             .name(getCellValue(row.getCell(1)))
                             .unity(getCellValue(row.getCell(2)))
                             .quantity((int) getNumericCellValue(row.getCell(3)))
@@ -479,7 +483,7 @@ public class ManageProductsController {
 
                 // Handle ArticleType
                 if (firstCell == null || cellValue.isEmpty()) {
-                    if (currentArticle != null ) {
+                    if (currentArticle != null) {
                         System.out.println("Processing ArticleType for Article: " + (currentArticle != null ? currentArticle.getN() : "null"));
                         currentArticleType = Article_type.builder()
                                 .name(getCellValue(row.getCell(1)))
@@ -496,8 +500,9 @@ public class ManageProductsController {
                 if (cellValue.chars().filter(ch -> ch == '.').count() == 1) {
                     System.out.println("Processing SArticle: " + cellValue);
                     currentSArticle = sarticle.builder()
-                            .N(cellValue)
+                            .n(cellValue)
                             .name(getCellValue(row.getCell(1)))
+                            .unity(getCellValue(row.getCell(2)))
                             .type(currentArticleType)
                             .article(currentArticle)
                             .quantity((int) getNumericCellValue(row.getCell(3)))
@@ -512,10 +517,11 @@ public class ManageProductsController {
                 if (cellValue.chars().filter(ch -> ch == '.').count() == 2) {
                     System.out.println("Processing SSArticle: " + cellValue);
                     ssarticle newSSArticle = ssarticle.builder()
-                            .N(cellValue)
+                            .n(cellValue)
                             .name(getCellValue(row.getCell(1)))
                             .sarticle(currentSArticle)
                             .quantity((int) getNumericCellValue(row.getCell(3)))
+                            .unity(getCellValue(row.getCell(2)))
                             .price((float) getNumericCellValue(row.getCell(4)))
                             .totalprice((float) getNumericCellValue(row.getCell(5)))
                             .build();
@@ -581,7 +587,9 @@ public class ManageProductsController {
         alert.showAndWait();
     }
 
-    public void ModifierBordereau(ActionEvent actionEvent) {
-        System.out.println("modifier");
+    @FXML
+    private void ModifierBordereau(ActionEvent actionEvent) {
+        dashboardController.loadContent("/views/BordereauEntreprise.fxml", String.valueOf(selectedBordereau));
     }
+
 }

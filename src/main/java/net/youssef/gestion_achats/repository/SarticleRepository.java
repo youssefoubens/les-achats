@@ -16,5 +16,6 @@ public interface SarticleRepository extends JpaRepository<sarticle,Long>{
    // List<sarticle> findByArticleType(Article_type articleType);
     void deleteAllByArticle(Article article);
 
+    sarticle findByN(String nBrdVe);
 }
 

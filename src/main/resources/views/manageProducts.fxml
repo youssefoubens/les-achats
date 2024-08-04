@@ -22,7 +22,6 @@
             <Button text="Upload" onAction="#handleUpload" />
             <Button text="Select Bordereau" onAction="#selectBordereau" styleClass="button" />
             <Button text="Delete Bordereau" onAction="#deleteBordereauAndRelatedEntities" styleClass="button" />
-            <Button text="Modifier Bordereau" onAction="#ModifierBordereau" styleClass="button" />
             <ProgressBar fx:id="progressBar" visible="false" prefWidth="200" />
         </HBox>
 
@@ -35,10 +34,12 @@
                 <TableColumn fx:id="priceColumn" text="P.U DH/HT" prefWidth="150" />
                 <TableColumn fx:id="totalPriceColumn" text="P. T DH/HT" prefWidth="150" />
             </columns>
-
         </TableView>
 
+        <HBox alignment="CENTER" spacing="10" styleClass="hbox" VBox.vgrow="ALWAYS">
+            <Button fx:id="modifierBordereauButton" text="Modifier Bordereau" onAction="#ModifierBordereau" styleClass="button" visible="false" />
+        </HBox>
     </VBox>
-
 </AnchorPane>
+
 

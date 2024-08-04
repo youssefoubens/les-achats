@@ -43,4 +43,13 @@ public class FxmlLoader {
         loader.load(); // Load the FXML file
         return loader.getController(); // Return the controller
     }
+
+    public FXMLLoader getLoader(String fxmlPath) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        // Set the controller factory to use Spring's ApplicationContext
+        loader.setControllerFactory(controllerClass ->
+                ApplicationContextProvider.getApplicationContext().getBean(controllerClass)
+        );
+        return loader;
+    }
 }

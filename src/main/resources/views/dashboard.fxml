@@ -15,6 +15,7 @@
                 <Button text="Liste des Consultations" onAction="#viewConsultations" />
                 <Button text="Offre des Fournisseurs" onAction="#viewOffers" />
                 <Button text="Consulter" onAction="#consult" />
+
             </VBox>
             <Button text="Exit" onAction="#exitApplication" styleClass="exit-button"/>
         </VBox>

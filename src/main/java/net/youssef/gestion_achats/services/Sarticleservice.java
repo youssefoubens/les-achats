@@ -49,7 +49,7 @@ public class Sarticleservice {
     }
 
 
-
-
-
+    public sarticle findByN(String nBrdVe) {
+        return sarticleRepository.findByN(nBrdVe);
+    }
 }

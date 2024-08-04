@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -18,14 +19,21 @@ public class ssarticle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String N;
+    private String n;
     private String unity;
     private int quantity;
     private float price;
     private float totalprice;
+    private String famille;
     @ManyToOne
     @JoinColumn(name = "sarticle_id")
     private sarticle sarticle;
+
+    @OneToMany(mappedBy = "ssarticle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AjouteEntreprise> ajouteEntreprises;
+//    @ManyToOne
+//    @JoinColumn(name = "famille_id")
+//    private Famille famille;
     @Override
     public int hashCode() {
         return Objects.hash(id);

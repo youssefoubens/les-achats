@@ -16,6 +16,7 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -197,7 +198,7 @@ public class ConsultationFormController {
         consultation.setSArticle(selectedSousArticle);
         consultation.setSousSousArticle(selectedSousSousArticle);
         consultation.setFournisseur(selectedFournisseur);
-        consultation.setDateConsultation(LocalDate.now());
+        consultation.setDateConsultation(LocalDateTime.from(LocalDate.now()));
 
         consultationService.saveConsultation(consultation);
 

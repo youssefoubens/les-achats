@@ -18,13 +18,13 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String N;
-    private String famille;
+    private String n;
     private String name;
     private String unity;
     private int quantity;
     private float price;
     private float totalprice;
+    private String famille;
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Article_type> types = new ArrayList<>();
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -32,9 +32,16 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "bordereau_id")
     private BORDEREAU bordereau;
+
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AjouteEntreprise> ajouteEntreprises;
+//    @ManyToOne
+//    @JoinColumn(name = "famille_id")
+//    private Famille famille;
+
     // getters and setters
     @Override
-   
     public String toString() {
         return name; // Display name in the ComboBox
     }

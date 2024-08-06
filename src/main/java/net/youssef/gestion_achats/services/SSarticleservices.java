@@ -38,7 +38,11 @@ public class SSarticleservices {
     }
 
 
-    public ssarticle findByN(String nBrdVe) {
-        return ssarticleRepository.findByN(nBrdVe);
+//    public ssarticle findByN(String nBrdVe) {
+//        return ssarticleRepository.findByN(nBrdVe);
+//    }
+    public List<ssarticle> findByN(String nBrd) {
+        return ssarticleRepository.findByN(nBrd);
     }
+
 }

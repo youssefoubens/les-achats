@@ -34,7 +34,7 @@ public class Article {
     private BORDEREAU bordereau;
 
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AjouteEntreprise> ajouteEntreprises;
 //    @ManyToOne
 //    @JoinColumn(name = "famille_id")

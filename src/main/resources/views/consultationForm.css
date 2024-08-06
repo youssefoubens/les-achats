@@ -1,39 +1,33 @@
-/* Apply styling to the GridPane */
-GridPane {
-    -fx-padding: 20;
-    -fx-background-color: #f0f0f0;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
+/* consultationForm.css */
+
+:root {
+    -fx-font-family: Arial, sans-serif;
+    -fx-font-size: 14px;
 }
 
-/* Style for the ComboBox */
+Label {
+    -fx-font-weight: bold;
+}
+
 ComboBox {
-    -fx-pref-width: 200px;
+    -fx-padding: 5;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
 }
 
-/* Style for the TextArea */
 TextArea {
-    -fx-pref-width: 300px;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
 }
 
-/* Style specifically for the emailSubject TextArea */
-#emailSubject {
-    -fx-pref-height: 50px;
-    -fx-pref-width: 300px;
-}
-
-/* Style for the Button */
 Button {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
     -fx-padding: 10 20;
+    -fx-border-radius: 5;
 }
 
-/* Style for the Labels */
-Label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333333;
+Button:hover {
+    -fx-background-color: #45a049;
 }

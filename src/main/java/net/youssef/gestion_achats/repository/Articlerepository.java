@@ -15,6 +15,8 @@ public interface Articlerepository extends JpaRepository<Article,Long>{
 
     List<Article> findByBordereau(BORDEREAU bordereau);
 
-    Optional<Object> findByN(String nBrdVe);
+   // Optional<Object> findByN(String nBrdVe);
+
+    List<Article> findByN(String nBrd);
 }
 

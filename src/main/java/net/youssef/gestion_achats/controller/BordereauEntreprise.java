@@ -7,10 +7,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import net.youssef.gestion_achats.AjouteEntrepriseResult;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.services.ArticleService;
-import net.youssef.gestion_achats.services.Sarticleservice;
-import net.youssef.gestion_achats.services.SSarticleservices;
+import net.youssef.gestion_achats.services.*;
+
 import net.youssef.gestion_achats.services.AjouteEntrepriseService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,24 +26,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class BordereauEnreprise {
+public class BordereauEntreprise {
 
     @FXML
-    private TableView<AjouteEntreprise> productTableView;
+    private TableView<AjouteEntrepriseResult> productTableView;
     @FXML
-    private TableColumn<AjouteEntreprise, String> nameColumn;
+    private TableColumn<AjouteEntrepriseResult, String> nameColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, String> familleColumn;
+    private TableColumn<AjouteEntrepriseResult, String> familleColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, String> nBrdVeColumn;
+    private TableColumn<AjouteEntrepriseResult, String> nBrdVeColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, String> nBrdColumn;
+    private TableColumn<AjouteEntrepriseResult, String> nBrdColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, String> designationColumn;
+    private TableColumn<AjouteEntrepriseResult, String> designationColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, String> unityColumn;
+    private TableColumn<AjouteEntrepriseResult, String> unityColumn;
     @FXML
-    private TableColumn<AjouteEntreprise, Integer> quantityColumn;
+    private TableColumn<AjouteEntrepriseResult, Integer> quantityColumn;
     @FXML
     private Button uploadButton;
     @FXML
@@ -54,21 +55,22 @@ public class BordereauEnreprise {
     private AjouteEntrepriseService ajouteEntrepriseService;
 
     @Autowired
-    private Sarticleservice sarticleservice;
+    private Sarticleservice sarticleService;
 
     @Autowired
-    private SSarticleservices ssarticleservices;
+    private SSarticleservices ssarticleService;
 
     @Autowired
     private ArticleService articleService;
 
     private List<AjouteEntreprise> tempItems = new ArrayList<>();
-    private String bordereauNumber;
+    private String bordereauNumber0;
 
     public void setBordereauNumber(String bordereauNumber) {
-        this.bordereauNumber = bordereauNumber;
+        this.bordereauNumber0 = bordereauNumber;
         // Load data or perform actions based on the bordereauNumber
     }
+
     @FXML
     private void initialize() {
         initializeTableColumns();
@@ -76,44 +78,16 @@ public class BordereauEnreprise {
     }
 
     private void initializeTableColumns() {
-        nameColumn.setCellValueFactory(cellData -> getPropertyValue(cellData.getValue(), "DS"));
-        familleColumn.setCellValueFactory(cellData -> getPropertyValue(cellData.getValue(), "Famille"));
-        nBrdVeColumn.setCellValueFactory(cellData -> getPropertyValue(cellData.getValue(), "N"));
-        nBrdColumn.setCellValueFactory(cellData -> getPropertyValue(cellData.getValue(), "N"));
-        designationColumn.setCellValueFactory(cellData -> getDesignation(cellData.getValue()));
-        unityColumn.setCellValueFactory(cellData -> getPropertyValue(cellData.getValue(), "Unity"));
-        quantityColumn.setCellValueFactory(cellData -> getQuantity(cellData.getValue()));
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDs()));
+        familleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAjouteEntreprise().getFamille()));
+        nBrdVeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAjouteEntreprise().getN()));
+        nBrdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNbrd()));
+        designationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAjouteEntreprise().getDescription()));
+        unityColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAjouteEntreprise().getUnity()));
+        quantityColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getAjouteEntreprise().getQuantity()).asObject());
     }
 
-    private SimpleStringProperty getPropertyValue(AjouteEntreprise item, String property) {
-        switch (property) {
-            case "DS":
-                return new SimpleStringProperty(item.getDescription());
-            case "Famille":
-                return new SimpleStringProperty(item.getFamille());
-            case "N":
-                return new SimpleStringProperty(item.getN());
-            case "Unity":
-                return new SimpleStringProperty(item.getUnity());
-            default:
-                return new SimpleStringProperty("");
-        }
-    }
 
-    private SimpleStringProperty getDesignation(AjouteEntreprise item) {
-        if (item.getSarticle() != null) {
-            return new SimpleStringProperty(item.getSarticle().getName());
-        } else if (item.getSsarticle() != null) {
-            return new SimpleStringProperty(item.getSsarticle().getName());
-        } else if (item.getArticle() != null) {
-            return new SimpleStringProperty(item.getArticle().getName());
-        }
-        return new SimpleStringProperty("");
-    }
-
-    private ObjectProperty<Integer> getQuantity(AjouteEntreprise item) {
-        return new SimpleIntegerProperty(item.getQuantity()).asObject();
-    }
 
     @FXML
     private void handleUpload() {
@@ -137,18 +111,18 @@ public class BordereauEnreprise {
 
     private void processExcelFile(File file) {
         tempItems.clear(); // Clear previous items
-        List<AjouteEntreprise> allItems = new ArrayList<>();
+        List<AjouteEntrepriseResult> allItems = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream(file); Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheetAt(0);
 
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Skip header row
-
-                AjouteEntreprise ajout = createAjouteEntreprise(row);
+                AjouteEntrepriseResult result = createAjouteEntreprise(row);
+                AjouteEntreprise ajout = result.getAjouteEntreprise();
                 if (ajout != null) {
-                    allItems.add(ajout);
+                    allItems.add(result);
                     // Add to tempItems if the condition for saving is met
-                    if (!ajout.getN().equals(getCellValue(row.getCell(2)))) {
+                    if (!ajout.getN().equals(getCellValue(row.getCell(3)))) {
                         tempItems.add(ajout);
                     } else {
                         updateExistingEntity(getCellValue(row.getCell(2)), ajout.getFamille());
@@ -166,30 +140,43 @@ public class BordereauEnreprise {
 
     private void updateExistingEntity(String nBrd, String famille) {
         String[] parts = nBrd.split("\\.");
+        String bordereauNumber = "Bordereau" + bordereauNumber0;
 
         if (parts.length == 2 && parts[1].equals("0")) {
-            Article article = articleService.findByN(nBrd);
-            if (article != null) {
-                article.setFamille(famille);
-                articleService.saveArticle(article);
+            List<Article> articles = articleService.findByN(nBrd);
+            for (Article article : articles) {
+                if (bordereauNumber.equals(String.valueOf(article.getBordereau()))) {
+                    article.setFamille(famille);
+                    articleService.saveArticle(article);
+                }
             }
         } else if (parts.length == 2) {
-            sarticle sarticle = sarticleservice.findByN(nBrd);
-            if (sarticle != null) {
-                sarticle.setFamille(famille);
-                sarticleservice.saveSarticle(sarticle);
+            List<sarticle> sarticles = sarticleService.findByN(nBrd);
+            for (sarticle sarticle : sarticles) {
+                if (bordereauNumber.equals(String.valueOf(sarticle.getArticle().getBordereau()))) {
+                    sarticle.setFamille(famille);
+                    sarticleService.saveSarticle(sarticle);
+                }
             }
         } else if (parts.length == 3) {
-            ssarticle ssarticle = ssarticleservices.findByN(nBrd);
-            if (ssarticle != null) {
-                ssarticle.setFamille(famille);
-                ssarticleservices.saveSSarticle(ssarticle);
+            List<ssarticle> ssarticles = ssarticleService.findByN(nBrd);
+            for (ssarticle ssarticle : ssarticles) {
+                if (bordereauNumber.equals(String.valueOf(ssarticle.getSarticle().getArticle().getBordereau()))) {
+                    ssarticle.setFamille(famille);
+                    ssarticleService.saveSSarticle(ssarticle);
+                }
             }
         }
     }
 
-    private AjouteEntreprise createAjouteEntreprise(Row row) {
+
+    private AjouteEntrepriseResult createAjouteEntreprise(Row row) {
         String ds = getCellValue(row.getCell(0));
+        System.out.println("####################################3");
+        System.out.println("####################################3");
+        System.out.println("####################################3"+ds);
+        System.out.println("####################################3");
+
         String famille = getCellValue(row.getCell(1));
         String nBrdVe = getCellValue(row.getCell(2));
         String nBrd = getCellValue(row.getCell(3));
@@ -205,8 +192,11 @@ public class BordereauEnreprise {
         ajout.setPrice(0); // Assuming price is 0; modify as needed
         ajout.setTotalprice(quantity * 0);
         ajout.setN(nBrdVe);
+        ajout.setNumbordereau(bordereauNumber0);
         linkEntities(ajout, nBrdVe);
-        return ajout;
+
+        // Return the result encapsulating AjouteEntreprise, ds, and nBrd
+        return new AjouteEntrepriseResult(ajout, ds, nBrd);
     }
 
     private int parseQuantity(String quantityString) {
@@ -222,32 +212,55 @@ public class BordereauEnreprise {
     }
 
     private void linkEntities(AjouteEntreprise ajouteEntreprise, String nBrdVe) {
+        String nBrdVe1;
+        String bordereauNumber = "Bordereau" + bordereauNumber0;
         String[] parts = nBrdVe.split("\\.");
 
-        String nBrdVe1;
         if (parts.length == 2 && parts[1].equals("0")) {
             nBrdVe1 = parts[0];
 
-            Article article = articleService.findByN(nBrdVe1);
-            if (article != null) {
-                ajouteEntreprise.setArticle(article);
+            List<Article> articles = articleService.findByN(nBrdVe1);
+            for (Article article : articles) {
+                if (bordereauNumber.equals(String.valueOf(article.getBordereau()))) {
+                    ajouteEntreprise.setArticle(article);
+                    break; // Exit loop once a matching article is found
+                }
             }
-        } else if (parts.length == 2) {
-            nBrdVe1 = parts[0] + "." + parts[1];
 
-            sarticle sarticle = sarticleservice.findByN(nBrdVe1);
-            if (sarticle != null) {
-                ajouteEntreprise.setSarticle(sarticle);
+            if (ajouteEntreprise.getArticle() == null) {
+                // Handle the case where no matching article is found
+                System.err.println("No matching article found or Bordereau does not match for: " + nBrdVe);
             }
         } else if (parts.length == 3) {
-            nBrdVe1 = parts[0] + "." + parts[1] + "." + parts[2];
-            ssarticle ssarticle = ssarticleservices.findByN(nBrdVe1);
+            nBrdVe1 = parts[0] + "." + parts[1];
 
-            if (ssarticle != null) {
-                ajouteEntreprise.setSsarticle(ssarticle);
+            List<sarticle> sarticles = sarticleService.findByN(nBrdVe1);
+            for (sarticle sarticle : sarticles) {
+                if (bordereauNumber.equals(String.valueOf(sarticle.getArticle().getBordereau()))) {
+                    ajouteEntreprise.setSarticle(sarticle);
+                    break; // Exit loop once a matching sarticle is found
+                }
             }
-        } else {
-            System.out.println("Unexpected identifier format: " + nBrdVe);
+
+            if (ajouteEntreprise.getSarticle() == null) {
+                // Handle the case where no matching sarticle is found
+                System.err.println("No matching sarticle found or Bordereau does not match for: " + nBrdVe);
+            }
+        } else if (parts.length == 4) {
+            nBrdVe1 = parts[0] + "." + parts[1] + "." + parts[2];
+
+            List<ssarticle> ssarticles = ssarticleService.findByN(nBrdVe1);
+            for (ssarticle ssarticle : ssarticles) {
+                if (bordereauNumber.equals(String.valueOf(ssarticle.getSarticle().getArticle().getBordereau()))) {
+                    ajouteEntreprise.setSsarticle(ssarticle);
+                    break; // Exit loop once a matching ssarticle is found
+                }
+            }
+
+            if (ajouteEntreprise.getSsarticle() == null) {
+                // Handle the case where no matching ssarticle is found
+                System.err.println("No matching ssarticle found or Bordereau does not match for: " + nBrdVe);
+            }
         }
     }
 

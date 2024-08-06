@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.BordereauEnreprise">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="net.youssef.gestion_achats.controller.BordereauEntreprise">
     <VBox alignment="CENTER" spacing="10" stylesheets="/views/manageproduct.css">
 
         <HBox alignment="CENTER" spacing="10" styleClass="hbox">

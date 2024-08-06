@@ -63,8 +63,11 @@ public class ArticleService {
         return articleRepository.findByBordereau(bordereau);
     }
 
-    public Article findByN(String nBrdVe) {
-        // Assuming the Article entity has a field 'n' that corresponds to the "N" field
-        return (Article) articleRepository.findByN(nBrdVe).orElse(null);
+//    public Article findByN(String nBrdVe) {
+//        // Assuming the Article entity has a field 'n' that corresponds to the "N" field
+//        return (Article) articleRepository.findByN(nBrdVe).orElse(null);
+//    }
+    public List<Article> findByN(String nBrd) {
+        return articleRepository.findByN(nBrd);
     }
 }

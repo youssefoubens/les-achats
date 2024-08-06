@@ -11,16 +11,15 @@
         <VBox spacing="10" styleClass="sidebar" alignment="CENTER">
             <ImageView fx:id="logoImageView" fitWidth="150" preserveRatio="true" styleClass="logo"/>
             <VBox fx:id="buttonContainer" spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
-                <Button text="Home" onAction="#showHome" />
-                <Button text="Liste des Consultations" onAction="#viewConsultations" />
-                <Button text="Offre des Fournisseurs" onAction="#viewOffers" />
-                <Button text="Consulter" onAction="#consult" />
-
+                <Button text="Home" onAction="#showHome" styleClass="nav-button"/>
+                <Button text="Liste des Consultations" onAction="#viewConsultations" styleClass="nav-button"/>
+                <Button text="Offre des Fournisseurs" onAction="#viewOffers" styleClass="nav-button"/>
+                <Button text="Enregistrer une Consultation" onAction="#consult" styleClass="nav-button"/>
             </VBox>
             <Button text="Exit" onAction="#exitApplication" styleClass="exit-button"/>
         </VBox>
     </left>
     <center>
-        <AnchorPane fx:id="contentPane" />
+        <AnchorPane fx:id="contentPane"/>
     </center>
 </BorderPane>

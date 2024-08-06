@@ -5,18 +5,20 @@
 }
 
 .logo {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 0);
 }
 
-.sidebar Button {
+.nav-button {
     -fx-background-color: #3498db; /* Light blue buttons */
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-padding: 10 20;
     -fx-cursor: hand;
+    -fx-pref-width: 200px; /* Set a preferred width for the buttons */
+    -fx-alignment: CENTER; /* Center align text */
 }
 
-.sidebar Button:hover {
+.nav-button:hover {
     -fx-background-color: #2980b9; /* Darker blue on hover */
 }
 

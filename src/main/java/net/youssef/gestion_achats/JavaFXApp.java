@@ -24,6 +24,7 @@ public class JavaFXApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Gestion des Achats");
 
@@ -43,7 +44,7 @@ public class JavaFXApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Dashboard");
         primaryStage.setMinWidth(1160);
-        primaryStage.setMinHeight(600);
+        primaryStage.setMinHeight(700);
 
         primaryStage.show();
     }

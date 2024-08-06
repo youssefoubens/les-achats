@@ -25,6 +25,7 @@ public class sarticle {
     private float price;
     private float totalprice;
     private String famille;
+
     @ManyToOne
     @JoinColumn(name = "Article_type_id")
     private Article_type type;
@@ -42,9 +43,7 @@ public class sarticle {
 //    @JoinColumn(name = "famille_id")
 //    private Famille famille;
 @Override
-    public String toString(
-
-) {
+    public String toString() {
         return name; // Display name in the ComboBox
     }
     @Override

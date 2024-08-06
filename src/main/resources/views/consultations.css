@@ -1,34 +1,20 @@
+/* consultations.css */
+
 .consultation-table {
-    -fx-table-cell-border-color: transparent;
-    -fx-padding: 10;
-    -fx-background-color: #f4f4f4;
-    -fx-border-color: #dcdcdc;
+    -fx-border-color: #ddd;
     -fx-border-width: 1px;
     -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-    -fx-font-size: 14px;
-}
-
-.consultation-table .column-header {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-}
-
-.consultation-table .tree-table-cell {
-    -fx-padding: 4 10 4 10;
-    -fx-text-alignment: CENTER_LEFT;
-    -fx-wrap-text: true;
-}
-
-.consultation-table .tree-table-row-cell:odd {
+    -fx-padding: 10px;
     -fx-background-color: #f9f9f9;
 }
 
-.consultation-table .tree-table-row-cell:even {
-    -fx-background-color: #ffffff;
+.table-column {
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
 }
 
-.consultation-table .tree-table-row-cell:selected {
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
+.table-view {
+    -fx-background-color: #fff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
 }

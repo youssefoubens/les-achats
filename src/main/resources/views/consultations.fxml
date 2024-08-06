@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1"  fx:controller="net.youssef.gestion_achats.controller.ConsultationController"  stylesheets="/views/consultations.css">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.ConsultationController" stylesheets="/views/consultations.css">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
@@ -13,11 +13,12 @@
         <TableView fx:id="consultationTable" layoutX="15.0" layoutY="5.0" prefWidth="1000" prefHeight="500" styleClass="consultation-table">
             <columns>
 
-                <TableColumn fx:id="articleColumn" text="Article" prefWidth="250" />
+                <TableColumn fx:id="articleColumn" text="Article" prefWidth="200" />
                 <TableColumn fx:id="sousArticleColumn" text="Sous-Article" prefWidth="200" />
                 <TableColumn fx:id="sousSousArticleColumn" text="Sous-Sous-Article" prefWidth="200" />
                 <TableColumn fx:id="fournisseurColumn" text="Fournisseur" prefWidth="250" />
-                <TableColumn fx:id="dateConsultationColumn" text="trace de consultaion" prefWidth="100" />
+                <TableColumn fx:id="piecesJointesColumn" text="Pieces Jointes" prefWidth="250" />
+                <TableColumn fx:id="dateConsultationColumn" text="Date Consultation" prefWidth="150" />
             </columns>
         </TableView>
     </children>

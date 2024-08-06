@@ -1,0 +1,63 @@
+/* Overall StackPane styling for centering the VBox */
+.vbox {
+    -fx-padding: 10px; /* Padding around the VBox */
+
+
+    -fx-algnment: center; /* Center content within VBox */
+}
+
+/* GridPane styling */
+.grid-pane {
+    -fx-background-color: #f5f5f5; /* Light gray background */
+    -fx-hgap: 5px; /* Horizontal gap between columns */
+    -fx-vgap: 15px; /* Vertical gap between rows */
+    -fx-padding: 10px; /* Padding around the grid */
+}
+
+/* Label styling */
+.label {
+    -fx-font-size: 16px; /* Larger font size for better readability */
+    -fx-text-fill: #333; /* Dark gray text color */
+    -fx-font-weight: bold; /* Bold text for labels */
+}
+
+/* TextField styling */
+.text-field {
+    -fx-background-color: #ffffff; /* White background for text fields */
+    -fx-border-color: #dcdcdc; /* Light gray border */
+    -fx-border-width: 1px; /* Thin border */
+    -fx-font-size: 14px; /* Font size for text fields */
+    -fx-padding: 10px; /* Padding inside the text field */
+    -fx-pref-width: 200px; /* Preferred width for consistency */
+}
+
+/* ComboBox styling */
+.combo-box {
+    -fx-background-color: #ffffff; /* White background */
+    -fx-border-color: #dcdcdc; /* Light gray border */
+    -fx-border-width: 1px; /* Thin border */
+    -fx-font-size: 14px; /* Font size for combo boxes */
+    -fx-padding: 4px; /* Padding inside the combo box */
+    -fx-pref-width: 500px; /* Preferred width for consistency */
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: #007bff; /* Blue background for buttons */
+    -fx-text-fill: #ffffff; /* White text color */
+    -fx-font-weight: bold; /* Bold text for buttons */
+    -fx-padding: 10px 20px; /* Padding inside buttons */
+    -fx-border-radius: 5px; /* Rounded corners */
+    -fx-background-radius: 5px; /* Rounded corners for background */
+}
+
+/* TextArea styling */
+.text-area {
+    -fx-background-color: #ffffff; /* White background for text areas */
+    -fx-border-color: #dcdcdc; /* Light gray border */
+    -fx-border-width: 1px; /* Thin border */
+    -fx-font-size: 14px; /* Font size for text areas */
+    -fx-padding: 1px; /* Padding inside the text area */
+    -fx-pref-width: 10px; /* Preferred width for consistency */
+    -fx-pref-height: 20px; /* Preferred height for text area */
+}

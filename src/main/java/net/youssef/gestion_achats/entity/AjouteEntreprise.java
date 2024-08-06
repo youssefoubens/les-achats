@@ -38,6 +38,8 @@ public class AjouteEntreprise {
 //    @JoinColumn(name = "famille_id")
 //    private Famille famille;
 
-
+    public String toString() {
+        return description; // Display name in the ComboBox
+    }
 
 }

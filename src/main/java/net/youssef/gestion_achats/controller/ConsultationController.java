@@ -6,21 +6,21 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import net.youssef.gestion_achats.entity.PieceJointe;
 import net.youssef.gestion_achats.entity.consultation;
 import net.youssef.gestion_achats.services.ConsultationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class ConsultationController {
 
     @FXML
     private TableView<consultation> consultationTable;
-
-    @FXML
-    private TableColumn<consultation, Long> idColumn;
 
     @FXML
     private TableColumn<consultation, String> fournisseurColumn;
@@ -37,18 +37,14 @@ public class ConsultationController {
     @FXML
     private TableColumn<consultation, String> dateConsultationColumn;
 
+    @FXML
+    private TableColumn<consultation, String> piecesJointesColumn;
+
     @Autowired
     private ConsultationService consultationService;
 
-    private DashboardController dashboardController;
-
-    public void setDashboardController(DashboardController dashboardController) {
-        this.dashboardController = dashboardController;
-    }
-
+    @FXML
     public void initialize() {
-       //idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
         fournisseurColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getFournisseur() != null) {
                 return new SimpleStringProperty(cellData.getValue().getFournisseur().getEmail());
@@ -67,7 +63,7 @@ public class ConsultationController {
 
         sousArticleColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getSArticle() != null) {
-                return new SimpleStringProperty(cellData.getValue().getSArticle().getName()); // Assuming getName() method exists
+                return new SimpleStringProperty(cellData.getValue().getSArticle().getName());
             } else {
                 return new SimpleStringProperty(""); // Handle null values gracefully
             }
@@ -81,7 +77,24 @@ public class ConsultationController {
             }
         });
 
-        dateConsultationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateConsultation().toString()));
+        dateConsultationColumn.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getDateConsultation() != null) {
+                return new SimpleStringProperty(cellData.getValue().getDateConsultation().toString());
+            } else {
+                return new SimpleStringProperty(""); // Handle null values gracefully
+            }
+        });
+
+        piecesJointesColumn.setCellValueFactory(cellData -> {
+            Set<PieceJointe> pieces = cellData.getValue().getPiecesJointes();
+            if (pieces != null && !pieces.isEmpty()) {
+                return new SimpleStringProperty(pieces.stream()
+                        .map(PieceJointe::getFilename) // Ensure getFilename() method exists in PieceJointe
+                        .collect(Collectors.joining(", ")));
+            } else {
+                return new SimpleStringProperty(""); // Handle null values gracefully
+            }
+        });
 
         loadConsultations();
     }

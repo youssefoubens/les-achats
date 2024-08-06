@@ -36,5 +36,8 @@ public class AjouteEntrepriseService {
     }
 
 
+    public List<AjouteEntreprise> getAllAjouteEntreprises() {
+        return ajouteEntrepriseRepository.findAll();
+    }
 }
 

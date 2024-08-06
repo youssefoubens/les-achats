@@ -335,6 +335,8 @@ public class ManageProductsController {
             System.out.println("Selected Bordereau: " + selectedBordereau);
             loadDataByBordereau(selectedBorderea);
             modifierBordereauButton.setVisible(true);
+            refreshDataFromDatabase();
+
         });
     }
 
@@ -591,5 +593,9 @@ public class ManageProductsController {
     private void ModifierBordereau(ActionEvent actionEvent) {
         dashboardController.loadContent("/views/BordereauEntreprise.fxml", String.valueOf(selectedBordereau));
     }
+
+
+
+
 
 }

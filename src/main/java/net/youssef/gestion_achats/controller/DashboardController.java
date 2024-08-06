@@ -96,7 +96,7 @@ public class DashboardController {
             Parent newContent = loader.load();
 
             // Pass the parameter to the new controller
-            BordereauEnreprise controller = loader.getController();
+            BordereauEntreprise controller = loader.getController();
             controller.setBordereauNumber(parameter);
 
             // Set the new content to the appropriate part of your UI

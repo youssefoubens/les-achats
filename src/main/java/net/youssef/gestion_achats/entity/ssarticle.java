@@ -25,6 +25,7 @@ public class ssarticle {
     private float price;
     private float totalprice;
     private String famille;
+
     @ManyToOne
     @JoinColumn(name = "sarticle_id")
     private sarticle sarticle;
@@ -37,6 +38,9 @@ public class ssarticle {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+    public String toString() {
+        return name; // Display name in the ComboBox
     }
 
 }

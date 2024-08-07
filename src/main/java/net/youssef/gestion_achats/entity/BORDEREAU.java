@@ -20,6 +20,8 @@ public class BORDEREAU {
     private Long idB;
     @OneToMany(mappedBy = "bordereau", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Article> articles;
+    @OneToMany(mappedBy = "bordereau", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<consultation> consultations;
     @Override
 
     public String toString() {

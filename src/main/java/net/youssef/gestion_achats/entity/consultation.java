@@ -18,26 +18,17 @@ public class consultation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String article;
+    private String sarticle;
+    private String ssarticle;
+    private String ajouteEntreprise;
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
 
     @ManyToOne
-    @JoinColumn(name = "article_id")
-    private Article article;
-
-    @ManyToOne
-    @JoinColumn(name = "sarticle_id")
-    private sarticle sArticle;
-
-    @ManyToOne
-    @JoinColumn(name = "ssarticle_id")
-    private ssarticle sousSousArticle;
-
-    @ManyToOne
-    @JoinColumn(name = "ajouteEntrepris_id")
-    private AjouteEntreprise ajouteEntreprise;
+    @JoinColumn(name = "bordereau_id")
+    private BORDEREAU bordereau;
 
     private LocalDateTime dateConsultation;
 

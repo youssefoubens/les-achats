@@ -29,10 +29,10 @@ public class ConsultationController {
     private TableColumn<consultation, String> articleColumn;
 
     @FXML
-    private TableColumn<consultation, String> sousArticleColumn;
+    private TableColumn<consultation, String> sarticleColumn;
 
     @FXML
-    private TableColumn<consultation, String> sousSousArticleColumn;
+    private TableColumn<consultation, String> ssarticleColumn;
 
     @FXML
     private TableColumn<consultation, String> dateConsultationColumn;
@@ -47,35 +47,17 @@ public class ConsultationController {
     public void initialize() {
         fournisseurColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getFournisseur() != null) {
-                return new SimpleStringProperty(cellData.getValue().getFournisseur().getEmail());
+                return new SimpleStringProperty(cellData.getValue().getFournisseur().getName());
             } else {
                 return new SimpleStringProperty(""); // Handle null values gracefully
             }
         });
 
-        articleColumn.setCellValueFactory(cellData -> {
-            if (cellData.getValue().getArticle() != null) {
-                return new SimpleStringProperty(cellData.getValue().getArticle().getName());
-            } else {
-                return new SimpleStringProperty(""); // Handle null values gracefully
-            }
-        });
+        articleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getArticle()));
 
-        sousArticleColumn.setCellValueFactory(cellData -> {
-            if (cellData.getValue().getSArticle() != null) {
-                return new SimpleStringProperty(cellData.getValue().getSArticle().getName());
-            } else {
-                return new SimpleStringProperty(""); // Handle null values gracefully
-            }
-        });
+        sarticleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSarticle()));
 
-        sousSousArticleColumn.setCellValueFactory(cellData -> {
-            if (cellData.getValue().getSousSousArticle() != null) {
-                return new SimpleStringProperty(cellData.getValue().getSousSousArticle().getName());
-            } else {
-                return new SimpleStringProperty(""); // Handle null values gracefully
-            }
-        });
+        ssarticleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSsarticle()));
 
         dateConsultationColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getDateConsultation() != null) {

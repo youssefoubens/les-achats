@@ -23,6 +23,8 @@ import java.util.Set;
 public class AddOfferDialogController {
 
     @FXML
+    private ComboBox<BORDEREAU> bordereauComboBox;
+    @FXML
     private ComboBox<Article> articleComboBox;
 
     @FXML
@@ -53,21 +55,6 @@ public class AddOfferDialogController {
     private Button selectFilesButton;
 
     @Autowired
-    private ArticleService articleService;
-
-    @Autowired
-    private Articletypeservice typeService;
-
-    @Autowired
-    private Sarticleservice sArticleService;
-
-    @Autowired
-    private SSarticleservices ssArticleService;
-
-    @Autowired
-    private AjouteEntrepriseService ajouteEntrepriseService;
-
-    @Autowired
     private FournisseurService fournisseurService;
 
     @Autowired
@@ -75,30 +62,34 @@ public class AddOfferDialogController {
 
     @Autowired
     private PieceJointeService pieceJointeService;
+    @Autowired
+    private BordereauService bordereauService;
 
     private List<File> selectedFiles = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        populateBordereauComboBox();
         populateArticleComboBox();
         populateFournisseurComboBox();
         populateAjouteEntrepriseComboBox();
-
-        articleComboBox.setOnAction(event -> {
-            populateTypeComboBox();
-            populateSousArticleComboBox();
-        });
-
+        bordereauComboBox.setOnAction(event->{populateArticleComboBox();});
+        articleComboBox.setOnAction(event -> { populateTypeComboBox(); populateSousArticleComboBox(); populateAjouteEntrepriseComboBox(); });
         typeComboBox.setOnAction(event -> populateSousArticleComboBox());
-        sousArticleComboBox.setOnAction(event -> populateSousSousArticleComboBox());
-
+        sousArticleComboBox.setOnAction(event -> { populateSousSousArticleComboBox(); populateAjouteEntrepriseComboBox(); });
+        sousSousArticleComboBox.setOnAction(event->{populateAjouteEntrepriseComboBox();});
         setupComboBoxConverters();
     }
 
     private void populateArticleComboBox() {
-        List<Article> articles = articleService.getAllArticles();
-        articleComboBox.setItems(FXCollections.observableArrayList(articles));
-        articleComboBox.getSelectionModel().clearSelection();
+        BORDEREAU selectedBordereau = bordereauComboBox.getValue();
+        if (selectedBordereau != null)
+        {
+            List<Article> articles = selectedBordereau.getArticles();
+            articleComboBox.setItems(FXCollections.observableArrayList(articles));
+            articleComboBox.getSelectionModel().clearSelection();
+        }
+
     }
 
     private void populateTypeComboBox() {
@@ -146,15 +137,37 @@ public class AddOfferDialogController {
     }
 
     private void populateFournisseurComboBox() {
+
         List<Fournisseur> fournisseurs = fournisseurService.getAllFournisseurs();
         fournisseurComboBox.setItems(FXCollections.observableArrayList(fournisseurs));
         fournisseurComboBox.getSelectionModel().clearSelection();
     }
 
     private void populateAjouteEntrepriseComboBox() {
-        List<AjouteEntreprise> ajouteEntreprises = ajouteEntrepriseService.getAllAjouteEntreprises();
-        ajouteentrepriseComboBox.setItems(FXCollections.observableArrayList(ajouteEntreprises));
-        ajouteentrepriseComboBox.getSelectionModel().clearSelection();
+        Article selectedArticle = articleComboBox.getValue();
+        sarticle selectedSousArticle = sousArticleComboBox.getValue();
+        ssarticle selectedssarticle = sousSousArticleComboBox.getValue();
+        if (selectedArticle != null){
+            List<AjouteEntreprise> ajouteEntreprises = selectedArticle.getAjouteEntreprises();
+            ajouteentrepriseComboBox.setItems(FXCollections.observableArrayList(ajouteEntreprises));
+            ajouteentrepriseComboBox.getSelectionModel().clearSelection();
+
+        } else if (selectedSousArticle != null) {
+            List<AjouteEntreprise> ajouteEntreprises = selectedSousArticle.getAjouteEntreprises();
+            ajouteentrepriseComboBox.setItems(FXCollections.observableArrayList(ajouteEntreprises));
+            ajouteentrepriseComboBox.getSelectionModel().clearSelection();
+        } else if (selectedssarticle != null) {
+            List<AjouteEntreprise> ajouteEntreprises = selectedssarticle.getAjouteEntreprises();
+            ajouteentrepriseComboBox.setItems(FXCollections.observableArrayList(ajouteEntreprises));
+            ajouteentrepriseComboBox.getSelectionModel().clearSelection();
+        }
+
+    }
+
+    private void populateBordereauComboBox() {
+        List<BORDEREAU> bordereaux = bordereauService.getAllBordereaux();
+        bordereauComboBox.setItems(FXCollections.observableArrayList(bordereaux));
+        bordereauComboBox.getSelectionModel().clearSelection();
     }
 
     private void setupComboBoxConverters() {
@@ -262,9 +275,9 @@ public class AddOfferDialogController {
             offre newOffre = offre.builder()
                     .description(descriptionField.getText())
                     .fournisseur(selectedFournisseur)
-                    .article(selectedArticle)
-                    .sousArticle(selectedSousArticle)
-                    .sousSousArticle(selectedSousSousArticle)
+                    .article(selectedArticle.getName())
+                    .sarticle(selectedSousArticle != null ? selectedSousArticle.getName() : null)
+                    .ssarticle(selectedSousSousArticle != null ? selectedSousSousArticle.getName() : null)
                     .price(Float.parseFloat(priceField.getText()))
                     .build();
 
@@ -279,17 +292,18 @@ public class AddOfferDialogController {
             // Show success message
             showAlert(Alert.AlertType.INFORMATION, "Success", "Offer saved successfully!");
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error","Price must be a valid number.");
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Price must be a valid number.");
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while saving the offer: " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

@@ -9,38 +9,43 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefWidth="1000" prefHeight="600" fx:controller="net.youssef.gestion_achats.controller.ConsultationFormController" stylesheets="/views/consultationForm.css">
     <GridPane alignment="CENTER" hgap="15" vgap="15" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="80" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+        <!-- Bordereau Selection -->
+        <Label text="Bordereau:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="bordereauComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300"/>
+
         <!-- Article Selection -->
-        <Label text="Select Article:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="articleComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select Article:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="articleComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- Type Selection -->
-        <Label text="Select Type:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="typeComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select Type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="typeComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- SousArticle Selection -->
-        <Label text="Select SousArticle:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="sousArticleComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select SousArticle:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="sousArticleComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- SousSousArticle Selection -->
-        <Label text="Select SousSousArticle:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="sousSousArticleComboBox" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select SousSousArticle:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="sousSousArticleComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- AjouteEntreprise Selection -->
-        <Label text="Select AjouteEntreprise:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="ajouteentrepriseComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select AjouteEntreprise:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="ajouteentrepriseComboBox" GridPane.rowIndex="5" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- Fournisseur Selection -->
-        <Label text="Select Fournisseur:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="fournisseurComboBox" GridPane.rowIndex="5" GridPane.columnIndex="1" prefWidth="300"/>
+        <Label text="Select Fournisseur:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="fournisseurComboBox" GridPane.rowIndex="6" GridPane.columnIndex="1" prefWidth="300"/>
 
         <!-- Manual Consultation Data -->
-        <Label text="Manual Consultation Data:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-        <TextArea fx:id="manualConsultationData" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.rowSpan="2" prefWidth="400" prefHeight="100"/>
+        <Label text="Manual Consultation Data:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+        <TextArea fx:id="manualConsultationData" GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.rowSpan="2" prefWidth="100" prefHeight="50"/>
 
         <!-- Register Button -->
-        <Button text="Enregistrer la Consultation" onAction="#enregistrerConsultation" GridPane.rowIndex="8" GridPane.columnIndex="1" prefWidth="200"/>
+        <Button text="Enregistrer la Consultation" onAction="#saveConsultation" GridPane.rowIndex="9" GridPane.columnIndex="1" prefWidth="200"/>
     </GridPane>
+
     <!-- File Selection -->
-    <Button fx:id="selectFilesButton" text="Ajouter les pièces jointes" onAction="#selectFiles" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="20"/>
-    <TextArea fx:id="pieceJointeData" editable="false" prefHeight="100" prefWidth="200" AnchorPane.bottomAnchor="100" AnchorPane.rightAnchor="1000"/>
+    <Button fx:id="selectFilesButton" text="Ajouter les pièces jointes" onAction="#selectFiles" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="2"/>
+    <TextArea fx:id="pieceJointeData" editable="false" prefHeight="50" prefWidth="250" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="2"/>
 </AnchorPane>

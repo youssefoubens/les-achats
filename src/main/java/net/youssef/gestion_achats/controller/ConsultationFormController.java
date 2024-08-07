@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Window;
 import javafx.util.StringConverter;
 import net.youssef.gestion_achats.entity.*;
 import net.youssef.gestion_achats.services.*;
@@ -43,6 +42,9 @@ public class ConsultationFormController {
     private ComboBox<Fournisseur> fournisseurComboBox;
 
     @FXML
+    private ComboBox<BORDEREAU> bordereauComboBox;
+
+    @FXML
     private TextArea manualConsultationData;
 
     @FXML
@@ -75,63 +77,64 @@ public class ConsultationFormController {
     @Autowired
     private PieceJointeService pieceJointeService;
 
+    @Autowired
+    private BordereauService bordereauService;
+
     private List<File> selectedFiles = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        populateBordereauComboBox();
         populateArticleComboBox();
         populateFournisseurComboBox();
         populateAjouteEntrepriseComboBox();
-
-        articleComboBox.setOnAction(event -> {populateTypeComboBox();populateSousArticleComboBox();});
+        bordereauComboBox.setOnAction(event -> populateArticleComboBox());
+        articleComboBox.setOnAction(event -> {
+            populateTypeComboBox();
+            populateSousArticleComboBox();
+            populateAjouteEntrepriseComboBox();
+        });
         typeComboBox.setOnAction(event -> populateSousArticleComboBox());
         sousArticleComboBox.setOnAction(event -> populateSousSousArticleComboBox());
-
+        sousSousArticleComboBox.setOnAction(event -> populateAjouteEntrepriseComboBox());
         setupComboBoxConverters();
     }
 
     private void populateArticleComboBox() {
-        List<Article> articles = articleService.getAllArticles();
-        articleComboBox.setItems(FXCollections.observableArrayList(articles));
-        articleComboBox.getSelectionModel().clearSelection();
+        BORDEREAU selectedBordereau = bordereauComboBox.getValue();
+        if (selectedBordereau != null) {
+            List<Article> articles = selectedBordereau.getArticles();
+            articleComboBox.setItems(FXCollections.observableArrayList(articles));
+            articleComboBox.getSelectionModel().clearSelection();
+        }
     }
 
     private void populateTypeComboBox() {
         Article selectedArticle = articleComboBox.getValue();
-
         if (selectedArticle != null) {
             List<Article_type> types = selectedArticle.getTypes();
             typeComboBox.setItems(FXCollections.observableArrayList(types));
             typeComboBox.getSelectionModel().clearSelection();
-            sousArticleComboBox.setItems(FXCollections.observableArrayList());
-            sousSousArticleComboBox.setItems(FXCollections.observableArrayList());
         } else {
             typeComboBox.setItems(FXCollections.observableArrayList());
-            sousArticleComboBox.setItems(FXCollections.observableArrayList());
-            sousSousArticleComboBox.setItems(FXCollections.observableArrayList());
         }
     }
 
     private void populateSousArticleComboBox() {
         Article selectedArticle = articleComboBox.getValue();
         Article_type selectedType = typeComboBox.getValue();
-
-        if (selectedType != null)
-        {
+        if (selectedType != null) {
             List<sarticle> sousArticles = selectedType.getSousArticles();
             sousArticleComboBox.setItems(FXCollections.observableArrayList(sousArticles));
             sousArticleComboBox.getSelectionModel().clearSelection();
-        }
-      else if (selectedArticle != null) {
+        } else if (selectedArticle != null) {
             List<sarticle> sousArticles = selectedArticle.getSarticles();
-            System.out.println("Fetched sousArticles for selectedArticle: " + selectedArticle);
             sousArticleComboBox.setItems(FXCollections.observableArrayList(sousArticles));
             sousArticleComboBox.getSelectionModel().clearSelection();
         } else {
             sousArticleComboBox.setItems(FXCollections.observableArrayList());
         }
     }
-
 
     private void populateSousSousArticleComboBox() {
         sarticle selectedSousArticle = sousArticleComboBox.getValue();
@@ -151,9 +154,27 @@ public class ConsultationFormController {
     }
 
     private void populateAjouteEntrepriseComboBox() {
-        List<AjouteEntreprise> ajouteEntreprises = ajouteEntrepriseService.getAllAjouteEntreprises();
+        Article selectedArticle = articleComboBox.getValue();
+        sarticle selectedSousArticle = sousArticleComboBox.getValue();
+        ssarticle selectedSousSousArticle = sousSousArticleComboBox.getValue();
+        List<AjouteEntreprise> ajouteEntreprises = new ArrayList<>();
+        if (selectedArticle != null) {
+            ajouteEntreprises.addAll(selectedArticle.getAjouteEntreprises());
+        }
+        if (selectedSousArticle != null) {
+            ajouteEntreprises.addAll(selectedSousArticle.getAjouteEntreprises());
+        }
+        if (selectedSousSousArticle != null) {
+            ajouteEntreprises.addAll(selectedSousSousArticle.getAjouteEntreprises());
+        }
         ajouteentrepriseComboBox.setItems(FXCollections.observableArrayList(ajouteEntreprises));
         ajouteentrepriseComboBox.getSelectionModel().clearSelection();
+    }
+
+    private void populateBordereauComboBox() {
+        List<BORDEREAU> bordereaux = bordereauService.getAllBordereaux();
+        bordereauComboBox.setItems(FXCollections.observableArrayList(bordereaux));
+        bordereauComboBox.getSelectionModel().clearSelection();
     }
 
     private void setupComboBoxConverters() {
@@ -195,11 +216,12 @@ public class ConsultationFormController {
             }
         });
     }
+
     @FXML
     private void selectFiles() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"),
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif", "*.xlsx"),
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
         );
 
@@ -218,81 +240,48 @@ public class ConsultationFormController {
         }
         pieceJointeData.setText(sb.toString());
     }
+
     private Set<PieceJointe> saveSelectedFiles(consultation consultationa) throws Exception {
         Set<PieceJointe> piecesJointes = new HashSet<>();
-        Path destinationDir = Path.of("C:/User/youssef/Desktop/save/files"); // Update this path to your desired save location
-
-        Files.createDirectories(destinationDir); // Ensure directory exists
-
         for (File file : selectedFiles) {
-            Path destinationPath = destinationDir.resolve(file.getName());
+            Path destinationPath = Path.of("path/to/store/" + file.getName());
             Files.copy(file.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
-            PieceJointe pieceJointe = PieceJointe.builder()
-                    .filePath(destinationPath.toString())
-                    .filename(file.getName())
-                    .consultations(new HashSet<>())
-                    .build();
-
-            // Add the consultation to the pieceJointe's consultations set
-            pieceJointe.getConsultations().add(consultationa);
-
-            pieceJointeService.savePieceJointe(pieceJointe);
+            PieceJointe pieceJointe = new PieceJointe();
+            pieceJointe.setFilePath(destinationPath.toString());
+            pieceJointe.setFilename(file.getName());
             piecesJointes.add(pieceJointe);
+            pieceJointeService.savePieceJointe(pieceJointe);
         }
-
         return piecesJointes;
     }
 
     @FXML
-    private void enregistrerConsultation() {
+    private void saveConsultation() {
+        consultation consultation = new consultation();
+
+        // Check for null values before calling methods
+        consultation.setArticle(articleComboBox.getValue() != null ? articleComboBox.getValue().getName() : null);
+        consultation.setSarticle(sousArticleComboBox.getValue() != null ? sousArticleComboBox.getValue().getName() : null);
+        consultation.setSsarticle(sousSousArticleComboBox.getValue() != null ? sousSousArticleComboBox.getValue().getName() : null);
+        consultation.setAjouteEntreprise(ajouteentrepriseComboBox.getValue() != null ? ajouteentrepriseComboBox.getValue().getDescription() : null);
+        consultation.setFournisseur(fournisseurComboBox.getValue());
+        consultation.setBordereau(bordereauComboBox.getValue());
+        consultation.setDateConsultation(LocalDateTime.now());
+
         try {
-            Fournisseur selectedFournisseur = fournisseurComboBox.getValue();
-            Article selectedArticle = articleComboBox.getValue();
-            sarticle selectedSousArticle = sousArticleComboBox.getValue();
-            ssarticle selectedSousSousArticle = sousSousArticleComboBox.getValue();
-            AjouteEntreprise selectedAjouteEntreprise = ajouteentrepriseComboBox.getValue();
-
-            if (selectedFournisseur == null || selectedArticle == null) {
-                showAlert(Alert.AlertType.ERROR, "Validation Error", "Please select both Article and Fournisseur.");
-                return;
-            }
-
-            // Create and save Consultation
-            consultation consultationa = consultation.builder()
-                    .fournisseur(selectedFournisseur)
-                    .article(selectedArticle)
-                    .sArticle(selectedSousArticle)
-                    .sousSousArticle(selectedSousSousArticle)
-                    .ajouteEntreprise(selectedAjouteEntreprise)
-                    .dateConsultation(LocalDateTime.now())
-                    .piecesJointes(new HashSet<>()) // Initialize the set
-                    .build();
-
-            // Save the files and create PieceJointe entities
-            Set<PieceJointe> piecesJointes = saveSelectedFiles(consultationa);
-
-            // Set the piecesJointes for the consultation
-            consultationa.setPiecesJointes(piecesJointes);
-
-            // Update the other side of the relationship
-            for (PieceJointe pieceJointe : piecesJointes) {
-                pieceJointe.getConsultations().add(consultationa);
-                pieceJointeService.savePieceJointe(pieceJointe);
-            }
-
-            // Save the consultation
-            consultationService.saveConsultation(consultationa);
-
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Consultation saved successfully!");
-
+            Set<PieceJointe> piecesJointes = saveSelectedFiles(consultation);
+            consultation.setPiecesJointes(piecesJointes);
+            consultationService.saveConsultation(consultation);
+            showAlert("Success", "Consultation saved successfully.");
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to save consultation. " + e.getMessage());
+            showAlert("Error", "Error saving consultation: " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

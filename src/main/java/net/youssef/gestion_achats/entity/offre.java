@@ -21,22 +21,17 @@ public class offre {
     private Long id;
     private String description;
     private float price;
+    private String article;
+    private String sarticle;
+    private String ssarticle;
 
     @ManyToOne
     @JoinColumn(name = "fournisseur_id")
     private Fournisseur fournisseur;
 
     @ManyToOne
-    @JoinColumn(name = "article_id")
-    private Article article;
-
-    @ManyToOne
-    @JoinColumn(name = "sarticle_id")
-    private sarticle sousArticle;
-
-    @ManyToOne
-    @JoinColumn(name = "ssarticle_id")
-    private ssarticle sousSousArticle;
+    @JoinColumn(name = "Bordereau_id")
+    private BORDEREAU bordereau;
 
     @Transient
     private final BooleanProperty selected = new SimpleBooleanProperty(false);

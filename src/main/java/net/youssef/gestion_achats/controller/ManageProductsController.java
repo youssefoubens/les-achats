@@ -33,6 +33,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -594,7 +595,66 @@ public class ManageProductsController {
         dashboardController.loadContent("/views/BordereauEntreprise.fxml", String.valueOf(selectedBordereau));
     }
 
+    @FXML
+    private void handleExport(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
 
+        if (file != null) {
+            exportToExcel(file);
+        }
+    }
+
+    private void exportToExcel(File file) {
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Products");
+
+            int rowIndex = 0;
+            Row headerRow = sheet.createRow(rowIndex++);
+            headerRow.createCell(0).setCellValue("N");
+            headerRow.createCell(1).setCellValue("Name");
+            headerRow.createCell(2).setCellValue("Unity");
+            headerRow.createCell(3).setCellValue("Quantity");
+            headerRow.createCell(4).setCellValue("Price");
+            headerRow.createCell(5).setCellValue("Total Price");
+
+            ObservableList<Object> items = productTableView.getItems();
+            for (Object item : items) {
+                Row row = sheet.createRow(rowIndex++);
+                if (item instanceof Article) {
+                    Article article = (Article) item;
+                    row.createCell(0).setCellValue(article.getN());
+                    row.createCell(1).setCellValue(article.getName());
+                    row.createCell(2).setCellValue(article.getUnity());
+                    row.createCell(3).setCellValue(article.getQuantity());
+                    row.createCell(4).setCellValue(article.getPrice());
+                    row.createCell(5).setCellValue(article.getTotalprice());
+                } else if (item instanceof Article_type) {
+                    Article_type articleType = (Article_type) item;
+                    row.createCell(1).setCellValue(articleType.getName());
+                } else if (item instanceof sarticle) {
+                    sarticle sArticle = (sarticle) item;
+                    row.createCell(1).setCellValue(sArticle.getName());
+                    row.createCell(3).setCellValue(sArticle.getQuantity());
+                    row.createCell(4).setCellValue(sArticle.getPrice());
+                    row.createCell(5).setCellValue(sArticle.getTotalprice());
+                } else if (item instanceof Separator) {
+                    Separator separator = (Separator) item;
+                    row.createCell(1).setCellValue(separator.getText());
+                }
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                workbook.write(fileOut);
+                System.out.println("Excel file created successfully.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.youssef.gestion_achats.controller.OffreController" stylesheets="/views/offers.css">
-    <TableView fx:id="offreTable" prefHeight="600.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" styleClass="table-view">
+    <TableView fx:id="offreTable" prefHeight="600.0" AnchorPane.topAnchor="10.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" styleClass="table-view">
         <columns>
             <TableColumn fx:id="selectColumn" text="Select" prefWidth="50"/>
             <TableColumn fx:id="articleColumn" text="Article" prefWidth="200"/>
@@ -16,4 +17,5 @@
             <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
         </columns>
     </TableView>
+    <Button fx:id="saveSelectedButton" text="Save Selected" layoutX="10.0" layoutY="620.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"/>
 </AnchorPane>
